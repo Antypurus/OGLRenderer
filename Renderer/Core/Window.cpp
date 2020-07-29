@@ -31,8 +31,6 @@ namespace VKR
     void Window::CreateWindow()
     {
         glfwInit();// NOTE(Tiago):  Initializes the GLFW library
-        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);// NOTE(Tiago): Stops GLFW from creating an OpenGL context
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);// NOTE(Tiago): Tells GLFW the window will not be resizable
         
         // NOTE(Tiago): In order to able to interact with a window from another thread we need to create the window on that thread. Since we want to have window event pools be independent from application framerate, we need to create the window in a thread and use that thread to poll its events.
         std::thread window_thread([this](){

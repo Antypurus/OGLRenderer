@@ -1,7 +1,7 @@
-prefix=C:/Program Files (x86)/VK_Renderer
+prefix=C:/Program Files (x86)/OGL_Renderer
 exec_prefix=${prefix}
-includedir=C:/Program Files (x86)/VK_Renderer/include
-libdir=C:/Program Files (x86)/VK_Renderer/lib
+includedir=C:/Program Files (x86)/OGL_Renderer/include
+libdir=C:/Program Files (x86)/OGL_Renderer/lib
 
 Name: GLFW
 Description: A multi-platform library for OpenGL, window and input

@@ -1,7 +1,6 @@
 /* date = July 29th 2020 0:21 am */
 #pragma once
 
-#define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
 #include <string>
