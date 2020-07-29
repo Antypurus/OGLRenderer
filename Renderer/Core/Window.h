@@ -5,6 +5,9 @@
 
 #include <string>
 
+#define OPENGL_MAJOR 4
+#define OPENGL_MINOR 0
+
 struct Window
 {
     public:

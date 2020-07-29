@@ -27,12 +27,27 @@ bool Window::IsOpen()
 
 void Window::CreateWindow()
 {
-    glfwInit();// NOTE(Tiago):  Initializes the GLFW library
-    
     // NOTE(Tiago): In order to able to interact with a window from another thread we need to create the window on that thread. Since we want to have window event pools be independent from application framerate, we need to create the window in a thread and use that thread to poll its events.
     std::thread window_thread([this](){
+								  glfwInit();// NOTE(Tiago):  Initializes the GLFW library
+								  
+								  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_MAJOR);// NOTE(Tiago): OpenGL major version
+								  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_MINOR);// NOTE(Tiago): OpenGL minor version
+								  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);// NOTE(Tiago): Using OpenGL core features
+								  
+#elif __APPLE__
+								  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);// NOTE(Tiago): For MacOS compatibility
+#endif
+								  
                                   this->window_handle = glfwCreateWindow(width, height, name.c_str(), nullptr, nullptr); // NOTE(Tiago): Create the GLFW window
-                                  
+								  
+								  if(this->window_handle == nullptr)
+								  {
+									  //TODO(Tiago):LOG ERROR
+									  this->is_open = false;
+									  return -1;
+								  }
+								  
                                   // NOTE(Tiago):  This section will infinitely poll window events and proccess them.
                                   while(this->IsOpen())
                                   {
