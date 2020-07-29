@@ -58,3 +58,8 @@ x64
 
 #vscode ignores
 .vscode
+
+# build ignores
+**/Release
+**/Win32
+**/x86
