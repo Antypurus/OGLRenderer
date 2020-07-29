@@ -12,10 +12,12 @@ struct Window
 {
     public:
     std::string name = "";
-    uint32_t height;
     uint32_t width;
+    uint32_t height;
     GLFWwindow* window_handle = nullptr;
-    
+    int32_t viewport_width;
+	int32_t viewport_height;
+	
     private:
     bool is_open = true;
     
@@ -24,6 +26,8 @@ struct Window
     Window(uint32_t width, uint32_t height, std::string&& window_name);
     ~Window();
     bool IsOpen();
+	void MakeContextCurrent();
+	void MakeContextNonCurrent();
     
     private:
     /*Handles creating the GLFW window regardless of what constructor was used*/

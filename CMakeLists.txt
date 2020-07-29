@@ -4,7 +4,8 @@ project(OGL_Renderer VERSION 0.0.1)
 
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    # MSVC Configurations
+    # MSVC/Windows Configurations
+    add_compile_definitions(WIN32_LEAN_AND_MEAN)
     set(warnings "/W4 /WX /EHsc") # Warning levels
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd26812") # Disables the warning from the usage of C-Style enums
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP /nologo /Oi") # Multithreaded compiling, intrinsic generation, and not msvc logo on compile
@@ -24,8 +25,6 @@ file(GLOB_RECURSE  SRCS
             "Renderer/*.hpp"
 	        "Renderer/*.h")
 
-add_compile_definitions(WIN32_LEAN_AND_MEAN)
-
 add_executable(${CMAKE_PROJECT_NAME} Renderer/main.cpp ${SRCS})
 
 find_package(OpenGL REQUIRED)
@@ -37,11 +36,14 @@ endif()
 include_directories("ThirdParty/glew/include")
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     # 64 bits
-    target_link_libraries(${CMAKE_PROJECT_NAME} "ThirdParty/glew/lib/release/x64/glew32")
+    target_link_libraries(${CMAKE_PROJECT_NAME} "ThirdParty/glew/lib/release/x64/glew32s")
 elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
     # 32 bits
-    target_link_libraries(${CMAKE_PROJECT_NAME} "ThirdParty/glew/lib/release/Win32/glew32")
+    target_link_libraries(${CMAKE_PROJECT_NAME} "ThirdParty/glew/lib/release/Win32/glew32s")
 endif()
+
+# GLEW_STATIC must be defined due to the usage of static linking with the GLEW library
+add_compile_definitions(GLEW_STATIC)
 
 target_link_libraries(${PROJECT_NAME} glm)
 target_link_libraries(${PROJECT_NAME} glfw)

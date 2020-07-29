@@ -25,6 +25,16 @@ bool Window::IsOpen()
     return this->is_open;
 }
 
+void Window::MakeContextCurrent()
+{
+	glfwMakeContextCurrent(this->window_handle); 
+}
+
+void Window::MakeContextNonCurrent()
+{
+	glfwMakeContextCurrent(nullptr);
+}
+
 void Window::CreateWindow()
 {
     // NOTE(Tiago): In order to able to interact with a window from another thread we need to create the window on that thread. Since we want to have window event pools be independent from application framerate, we need to create the window in a thread and use that thread to poll its events.
@@ -41,6 +51,11 @@ void Window::CreateWindow()
 								  
                                   this->window_handle = glfwCreateWindow(width, height, name.c_str(), nullptr, nullptr); // NOTE(Tiago): Create the GLFW window
 								  
+								  // NOTE(Tiago): Determine size of the viewport region after window creation
+								  glfwGetFramebufferSize(this->window_handle, &this->viewport_width, &this->viewport_height);
+								  
+								  this->MakeContextNonCurrent();
+
 								  if(this->window_handle == nullptr)
 								  {
 									  //TODO(Tiago):LOG ERROR
