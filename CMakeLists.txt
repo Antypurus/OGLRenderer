@@ -37,10 +37,10 @@ endif()
 include_directories("ThirdParty/glew/include")
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     # 64 bits
-    target_link_libraries(${CMAKE_PROJECT_NAME} "ThirdParty/glew/lib/release/x64/glew32.lib")
+    target_link_libraries(${CMAKE_PROJECT_NAME} "ThirdParty/glew/lib/release/x64/glew32")
 elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
     # 32 bits
-    target_link_libraries(${CMAKE_PROJECT_NAME} "ThirdParty/glew/lib/release/Win32/glew32.lib")
+    target_link_libraries(${CMAKE_PROJECT_NAME} "ThirdParty/glew/lib/release/Win32/glew32")
 endif()
 
 target_link_libraries(${PROJECT_NAME} glm)
