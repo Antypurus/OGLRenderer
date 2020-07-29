@@ -35,7 +35,7 @@ void Window::CreateWindow()
 								  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_MINOR);// NOTE(Tiago): OpenGL minor version
 								  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);// NOTE(Tiago): Using OpenGL core features
 								  
-#elif __APPLE__
+#if __APPLE__
 								  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);// NOTE(Tiago): For MacOS compatibility
 #endif
 								  
