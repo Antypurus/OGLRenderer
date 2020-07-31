@@ -20,6 +20,7 @@ struct Window
 	
     private:
     bool is_open = true;
+	bool failed_to_open = false;
     
     public:
     Window(uint32_t width, uint32_t height, const std::string& window_name);

@@ -53,14 +53,14 @@ void Window::CreateWindow()
 								  
 								  // NOTE(Tiago): Determine size of the viewport region after window creation
 								  glfwGetFramebufferSize(this->window_handle, &this->viewport_width, &this->viewport_height);
-								  
-								  this->MakeContextNonCurrent();
-
 								  if(this->window_handle == nullptr)
 								  {
 									  //TODO(Tiago):LOG ERROR
 									  this->is_open = false;
+									  this->failed_to_open= true;
 									  return -1;
+								  } else {
+									  this->is_open = true;
 								  }
 								  
                                   // NOTE(Tiago):  This section will infinitely poll window events and proccess them.
@@ -70,6 +70,7 @@ void Window::CreateWindow()
                                   }
                               });
     window_thread.detach();
+	while(!this->failed_to_open && !this->is_open);
 }
 
 void Window::PollEvents()
