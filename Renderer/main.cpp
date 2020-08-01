@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 #include "Core/Window.h"
 #include "Core/Shader.h"
+#include "Core/VertexBuffer.h"
 
 #include <iostream>
 
@@ -13,18 +14,13 @@ int main()
     
 	glewInit(); // Use GLEW to load modern OpenGL functions from the GPU driver, this must be done after creating the window.
 	
-	float vertices[] = {
-		-0.5f, -0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		0.0f,  0.5f, 0.0f
+	std::vector<Vertex> vertices = {
+		glm::vec3({-0.5f, -0.5f, 0.0f}),
+		glm::vec3({0.5f, -0.5f, 0.0f}),
+		glm::vec3({0.0f,  0.5f, 0.0f})
 	};
 	
-	unsigned int vbo;
-	glGenBuffers(1,&vbo);
-	
-	// TODO(Tiago): propper vertex buffer abstraction layer
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	VertexBuffer<Vertex> vbo(vertices);
 	
 	Shader vs = {"./Resources/Shaders/base.glsl", ShaderType::Vertex};
 	
