@@ -23,14 +23,44 @@ Shader::Shader(const std::string& shader_source_path,  const ShaderType& shader_
 	glShaderSource(shader_object, 1, &shader_program_source, NULL);
 	glCompileShader(shader_object);
 	
+	
+	// check for errors
 	int  success;
 	char infoLog[512];
 	glGetShaderiv(shader_object, GL_COMPILE_STATUS, &success);
-	
 	if(!success)
 	{
 		glGetShaderInfoLog(shader_object, 512, NULL, infoLog);
-		printf("Shader Compilatio Failed:%s\n", infoLog);
+		printf("Shader Compilation Failed:%s\n", infoLog);
 	}
 	
+}
+
+GPUProgram::GPUProgram(const Shader& vertex_shader, const Shader& fragment_shader)
+{
+	this->gpu_program_object = glCreateProgram();
+	
+	glAttachShader(this->gpu_program_object ,vertex_shader.shader_object);
+	glAttachShader(this->gpu_program_object ,fragment_shader.shader_object);
+	glLinkProgram(this->gpu_program_object);
+	
+	// check for errors
+	int  success;
+	char infoLog[512];
+	glGetProgramiv(this->gpu_program_object, GL_LINK_STATUS, &success);
+	if(!success) {
+		glGetProgramInfoLog(this->gpu_program_object, 512, NULL, infoLog);
+		printf("Shader GPU Program Linking Failed:%s\n", infoLog);
+	}
+}
+
+GPUProgram::~GPUProgram()
+{
+	glDeleteShader(this->vertex_shader.shader_object);
+	glDeleteShader(this->fragment_shader.shader_object);
+}
+
+void GPUProgram::Bind()
+{
+	glUseProgram(this->gpu_program_object);
 }

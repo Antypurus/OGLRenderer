@@ -22,9 +22,10 @@ int main()
 	unsigned int vbo;
 	glGenBuffers(1,&vbo);
 	
+	// TODO(Tiago): propper vertex buffer abstraction layer
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
+	
 	Shader vs = {"./Resources/Shaders/base.glsl", ShaderType::Vertex};
 	
     while(window.IsOpen())

@@ -12,8 +12,21 @@ enum class ShaderType
 
 struct Shader
 {
-	uint32_t shader_object;
+	uint32_t shader_object = 0;
 	
 	public:
+	Shader() = default;
 	Shader(const std::string& shader_source_path, const ShaderType& shader_type);
+};
+
+struct GPUProgram
+{
+	uint32_t gpu_program_object = 0;
+	Shader vertex_shader;
+	Shader fragment_shader;
+	
+	public:
+	GPUProgram(const Shader& vertex_shader, const Shader& fragment_shader);
+	~GPUProgram();
+	void Bind();
 };
