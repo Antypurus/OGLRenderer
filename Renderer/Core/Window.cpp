@@ -25,13 +25,21 @@ bool Window::IsOpen()
     return this->is_open;
 }
 
+void Window::CreateOpenGLViewport(uint32_t x_offset, uint32_t y_offset)
+{
+	// TODO(Tiago): Log viewport creation
+	glViewport(x_offset, y_offset, this->viewport_width, this->viewport_height);
+}
+
 void Window::MakeContextCurrent()
 {
+	// TODO(Tiago): Log context switch
 	glfwMakeContextCurrent(this->window_handle); 
 }
 
 void Window::MakeContextNonCurrent()
 {
+	// TODO(Tiago): log context switch
 	glfwMakeContextCurrent(nullptr);
 }
 
@@ -48,11 +56,9 @@ void Window::CreateWindow()
 #if __APPLE__
 								  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);// NOTE(Tiago): For MacOS compatibility
 #endif
-								  
                                   this->window_handle = glfwCreateWindow(width, height, name.c_str(), nullptr, nullptr); // NOTE(Tiago): Create the GLFW window
+								  // TODO(Tiago): Log window creation attempt and status
 								  
-								  // NOTE(Tiago): Determine size of the viewport region after window creation
-								  glfwGetFramebufferSize(this->window_handle, &this->viewport_width, &this->viewport_height);
 								  if(this->window_handle == nullptr)
 								  {
 									  //TODO(Tiago):LOG ERROR
@@ -63,11 +69,16 @@ void Window::CreateWindow()
 									  this->is_open = true;
 								  }
 								  
+								  // NOTE(Tiago): Determine size of the viewport region after window creation
+								  glfwGetFramebufferSize(this->window_handle, &this->viewport_width, &this->viewport_height);
+								  
                                   // NOTE(Tiago):  This section will infinitely poll window events and proccess them.
                                   while(this->IsOpen())
                                   {
                                       this->PollEvents();
                                   }
+
+								  return 0;
                               });
     window_thread.detach();
 	while(!this->failed_to_open && !this->is_open);
