@@ -46,49 +46,38 @@ void Window::MakeContextNonCurrent()
 void Window::CreateWindow()
 {
     // NOTE(Tiago): In order to able to interact with a window from another thread we need to create the window on that thread. Since we want to have window event pools be independent from application framerate, we need to create the window in a thread and use that thread to poll its events.
-    std::thread window_thread([this](){
-								  glfwInit();// NOTE(Tiago):  Initializes the GLFW library
-								  
-								  glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);// NOTE(Tiago): Window resizes cause a leak for an unknown reason must be a bug with GLFW and as such I had to disable them
-								  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_MAJOR);// NOTE(Tiago): OpenGL major version
-								  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_MINOR);// NOTE(Tiago): OpenGL minor version
-								  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);// NOTE(Tiago): Using OpenGL core features
-								  
+    
+	glfwInit();// NOTE(Tiago):  Initializes the GLFW library
+	
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_MAJOR);// NOTE(Tiago): OpenGL major version
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_MINOR);// NOTE(Tiago): OpenGL minor version
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);// NOTE(Tiago): Using OpenGL core features
+	
 #if __APPLE__
-								  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);// NOTE(Tiago): For MacOS compatibility
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);// NOTE(Tiago): For MacOS compatibility
 #endif
-                                  this->window_handle = glfwCreateWindow(width, height, name.c_str(), nullptr, nullptr); // NOTE(Tiago): Create the GLFW window
-								  // TODO(Tiago): Log window creation attempt and status
-								  
-								  this->MakeContextNonCurrent();
-								  
-								  if(this->window_handle == nullptr)
-								  {
-									  //TODO(Tiago):LOG ERROR
-									  this->is_open = false;
-									  this->failed_to_open= true;
-									  return -1;
-								  } else {
-									  this->is_open = true;
-								  }
-								  
-								  // NOTE(Tiago): Determine size of the viewport region after window creation
-								  glfwGetFramebufferSize(this->window_handle, &this->viewport_width, &this->viewport_height);
-								  this->RegisterViewportResizeCallback();
-								  
-                                  // NOTE(Tiago): This section will infinitely poll window events and proccess them.
-                                  while(this->IsOpen())
-								  {
-									  glfwSwapBuffers(this->window_handle);
-                                      this->PollEvents();
-                                  }
-								  
-								  return 0;
-                              });
-    window_thread.detach();
-	while(!this->failed_to_open && !this->is_open);
+	this->window_handle = glfwCreateWindow(width, height, name.c_str(), nullptr, nullptr); // NOTE(Tiago): Create the GLFW window
+	// TODO(Tiago): Log window creation attempt and status
+	
+	this->MakeContextNonCurrent();
+	
+	if(this->window_handle == nullptr)
+	{
+		//TODO(Tiago):LOG ERROR
+		this->is_open = false;
+		this->failed_to_open= true;
+		return;
+	} else {
+		this->is_open = true;
+	}
+	
+	// NOTE(Tiago): Determine size of the viewport region after window creation
+	glfwGetFramebufferSize(this->window_handle, &this->viewport_width, &this->viewport_height);
+	this->RegisterViewportResizeCallback();
+	
 	if(!this->failed_to_open)
 	{
+		this->Update();
 		this->SetOpenGLViewport();
 		this->MakeContextCurrent();
 	}
@@ -114,5 +103,11 @@ void Window::RegisterViewportResizeCallback()
 {
 	// NOTE(Tiago): has to be used in the same thread as the thread that handles window creation and even polling
 	glfwSetFramebufferSizeCallback(this->window_handle, viewport_resize_callback);
+}
+
+void Window::Update()
+{
+	glfwSwapBuffers(this->window_handle);
+	this->PollEvents();
 }
 

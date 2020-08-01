@@ -28,10 +28,11 @@ struct Window
     ~Window();
     bool IsOpen();
 	void SetOpenGLViewport(uint32_t x_offset = 0,uint32_t y_offset = 0);// TODO(Tiago): extend to handle custom widhts and heights
-    
+    void Update();
+	
+    private:
 	void MakeContextCurrent();
 	void MakeContextNonCurrent();
-    private:
 	// NOTE(Tiago): Currently not workign properly, please dont use unless necessary
     /*Handles creating the GLFW window regardless of what constructor was used*/
     void CreateWindow();
