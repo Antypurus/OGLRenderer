@@ -49,6 +49,7 @@ void Window::CreateWindow()
     std::thread window_thread([this](){
 								  glfwInit();// NOTE(Tiago):  Initializes the GLFW library
 								  
+								  glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);// NOTE(Tiago): Window resizes cause a leak for an unknown reason must be a bug with GLFW and as such I had to disable them
 								  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_MAJOR);// NOTE(Tiago): OpenGL major version
 								  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_MINOR);// NOTE(Tiago): OpenGL minor version
 								  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);// NOTE(Tiago): Using OpenGL core features
@@ -58,6 +59,8 @@ void Window::CreateWindow()
 #endif
                                   this->window_handle = glfwCreateWindow(width, height, name.c_str(), nullptr, nullptr); // NOTE(Tiago): Create the GLFW window
 								  // TODO(Tiago): Log window creation attempt and status
+								  
+								  this->MakeContextNonCurrent();
 								  
 								  if(this->window_handle == nullptr)
 								  {
@@ -73,9 +76,10 @@ void Window::CreateWindow()
 								  glfwGetFramebufferSize(this->window_handle, &this->viewport_width, &this->viewport_height);
 								  this->RegisterViewportResizeCallback();
 								  
-                                  // NOTE(Tiago):  This section will infinitely poll window events and proccess them.
+                                  // NOTE(Tiago): This section will infinitely poll window events and proccess them.
                                   while(this->IsOpen())
-                                  {
+								  {
+									  glfwSwapBuffers(this->window_handle);
                                       this->PollEvents();
                                   }
 								  
@@ -86,6 +90,7 @@ void Window::CreateWindow()
 	if(!this->failed_to_open)
 	{
 		this->SetOpenGLViewport();
+		this->MakeContextCurrent();
 	}
 }
 
