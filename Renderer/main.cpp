@@ -8,7 +8,7 @@ int main()
     glewInit(); // Use GLEW to load modern OpenGL functions from the GPU driver.
 
     Window window = {800,600,"Window"};
-    window.CreateOpenGLViewport();
+    window.SetOpenGLViewport();
 
     while(window.IsOpen())
     {

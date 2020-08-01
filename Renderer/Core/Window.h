@@ -27,7 +27,7 @@ struct Window
     Window(uint32_t width, uint32_t height, std::string&& window_name);
     ~Window();
     bool IsOpen();
-	void CreateOpenGLViewport(uint32_t x_offset = 0,uint32_t y_offset = 0);
+	void SetOpenGLViewport(uint32_t x_offset = 0,uint32_t y_offset = 0);// TODO(Tiago): extend to handle custom widhts and heights
     
     private:
 	// NOTE(Tiago): Currently not workign properly, please dont use unless necessary
@@ -37,5 +37,7 @@ struct Window
     void CreateWindow();
     /*Polls Window Events*/
     void PollEvents();
+	/*Registers a GLFW callback that resizes the viewport on window resize*/
+	void RegisterViewportResizeCallback();
     
 };

@@ -25,7 +25,7 @@ bool Window::IsOpen()
     return this->is_open;
 }
 
-void Window::CreateOpenGLViewport(uint32_t x_offset, uint32_t y_offset)
+void Window::SetOpenGLViewport(uint32_t x_offset, uint32_t y_offset)
 {
 	// TODO(Tiago): Log viewport creation
 	glViewport(x_offset, y_offset, this->viewport_width, this->viewport_height);
@@ -71,17 +71,22 @@ void Window::CreateWindow()
 								  
 								  // NOTE(Tiago): Determine size of the viewport region after window creation
 								  glfwGetFramebufferSize(this->window_handle, &this->viewport_width, &this->viewport_height);
+								  this->RegisterViewportResizeCallback();
 								  
                                   // NOTE(Tiago):  This section will infinitely poll window events and proccess them.
                                   while(this->IsOpen())
                                   {
                                       this->PollEvents();
                                   }
-
+								  
 								  return 0;
                               });
     window_thread.detach();
 	while(!this->failed_to_open && !this->is_open);
+	if(!this->failed_to_open)
+	{
+		this->SetOpenGLViewport();
+	}
 }
 
 void Window::PollEvents()
@@ -89,3 +94,20 @@ void Window::PollEvents()
     this->is_open = !glfwWindowShouldClose(window_handle);// NOTE(Tiago): Checks if the user asked to close the window
     glfwPollEvents();
 }
+
+// NOTE(Tiago): Actual viewport resize callback function
+static void viewport_resize_callback(GLFWwindow* window, int width, int height)
+{
+	// TODO(Tiago): Figure out a way to update the underlying window class data from here (global map window ptr -> window class maybe?)
+	int viewport_width;
+	int viewport_height;
+	glfwGetFramebufferSize(window, &viewport_width, &viewport_height);
+	glViewport(0, 0, viewport_width, viewport_height);
+};
+
+void Window::RegisterViewportResizeCallback()
+{
+	// NOTE(Tiago): has to be used in the same thread as the thread that handles window creation and even polling
+	glfwSetFramebufferSizeCallback(this->window_handle, viewport_resize_callback);
+}
+
