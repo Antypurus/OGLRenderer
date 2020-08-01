@@ -2,6 +2,7 @@
 
 #include <GL/glew.h>
 #include "Core/Window.h"
+#include "Core/Shader.h"
 
 #include <iostream>
 
@@ -23,6 +24,8 @@ int main()
 	
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	Shader vs = {"./Resources/Shaders/base.glsl"};
 	
     while(window.IsOpen())
     {
