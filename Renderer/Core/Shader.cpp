@@ -1,8 +1,7 @@
 #include "Shader.h"
 #include <fstream>
-#include <GL/glew.h>
 
-Shader::Shader(const std::string& shader_source_path)
+Shader::Shader(const std::string& shader_source_path,  const ShaderType& shader_type)
 {
 	//read shader source
 	std::ifstream file_read(shader_source_path);
@@ -19,7 +18,7 @@ Shader::Shader(const std::string& shader_source_path)
 		return;
 	}
 	
-	this->shader_object = glCreateShader(GL_VERTEX_SHADER);
+	this->shader_object = glCreateShader(static_cast<GLenum>(shader_type));
 	const char* shader_program_source = source.c_str();
 	glShaderSource(shader_object, 1, &shader_program_source, NULL);
 	glCompileShader(shader_object);
