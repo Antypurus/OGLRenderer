@@ -25,12 +25,12 @@ int main()
 	
     while(window.IsOpen())
     {
-		shader.Bind();
-		vbo.Bind();
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-		
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+		
+		shader.Bind();
+		vbo.Bind();
+		vbo.Draw();
 		
 		window.Update();
     }
