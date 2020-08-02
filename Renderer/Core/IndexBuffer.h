@@ -1,6 +1,7 @@
 /* date = August 2nd 2020 6:21 pm */
 #pragma once
 #include <vector>
+#include <cstdint>
 
 struct IndexBuffer
 {
