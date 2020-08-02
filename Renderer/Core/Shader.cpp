@@ -64,3 +64,9 @@ void GPUProgram::Bind()
 {
 	glUseProgram(this->gpu_program_object);
 }
+
+int GPUProgram::GetUniformLocation(const std::string& uniform_name)
+{
+	return glGetUniformLocation(this->gpu_program_object, uniform_name.c_str());
+}
+

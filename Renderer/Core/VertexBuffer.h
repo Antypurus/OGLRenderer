@@ -13,7 +13,9 @@ struct Vertex
 	Vertex(const glm::vec3& position):position(position){};
 	void SetVertexAttributes(uint32_t layout_slot = 0)
 	{
+		// TODO(Tiago): name it base layout slot?
 		glVertexAttribPointer(layout_slot, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(layout_slot);
 	}
 };
 
@@ -42,9 +44,6 @@ struct VertexBuffer
 		
 		//Records the vertex configuration data into the VAO
 		this->vertices[0].SetVertexAttributes(layout_slot);
-		
-		//enables the VAO
-		glEnableVertexAttribArray(layout_slot);
 	}
 	
 	void Bind()

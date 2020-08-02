@@ -29,4 +29,5 @@ struct GPUProgram
 	GPUProgram(const Shader& vertex_shader, const Shader& fragment_shader);
 	~GPUProgram();
 	void Bind();
+	int GetUniformLocation(const std::string& uniform_name);
 };
