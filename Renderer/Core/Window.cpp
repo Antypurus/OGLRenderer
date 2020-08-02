@@ -110,3 +110,15 @@ void Window::Update()
 	this->PollEvents();
 }
 
+void Window::ClearViewport()
+{
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void Window::ClearViewport(float clear_color[4])
+{
+	glClearColor(clear_color[0], clear_color[1], clear_color[2], clear_color[3]);
+	glClear(GL_COLOR_BUFFER_BIT);
+}
+

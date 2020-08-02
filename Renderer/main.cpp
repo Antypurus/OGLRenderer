@@ -9,12 +9,17 @@
 int main()
 {
 	
-    Window window = {800,600,"Window"};
+    Window window = {800,850,"Window"};
 	glewInit(); // Use GLEW to load modern OpenGL functions from the GPU driver, this must be done after creating the window.
 	std::vector<Vertex> vertices = {
-		glm::vec3({-0.5f, -0.5f, 0.0f}),
-		glm::vec3({0.5f, -0.5f, 0.0f}),
-		glm::vec3({0.0f,  0.5f, 0.0f})
+		// first triangle
+		glm::vec3{ 0.5f,  0.5f, 0.0f},  // top right
+		glm::vec3{0.5f, -0.5f, 0.0f},  // bottom right
+		glm::vec3{-0.5f,  0.5f, 0.0f},  // top left 
+		// second triangle
+		glm::vec3{ 0.5f, -0.5f, 0.0f},  // bottom right
+		glm::vec3{-0.5f, -0.5f, 0.0f},  // bottom left
+		glm::vec3{-0.5f,  0.5f, 0.0f}   // top left
 	};
 	
 	VertexBuffer<Vertex> vbo(vertices);
@@ -24,10 +29,9 @@ int main()
 	GPUProgram shader = {vs, fs};
 	
     while(window.IsOpen())
-    {
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-		
+    {	
+		window.ClearViewport();
+
 		shader.Bind();
 		vbo.Bind();
 		vbo.Draw();

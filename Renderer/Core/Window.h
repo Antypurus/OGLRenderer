@@ -23,17 +23,27 @@ struct Window
 	bool failed_to_open = false;
     
     public:
-    Window(uint32_t width, uint32_t height, const std::string& window_name);
-    Window(uint32_t width, uint32_t height, std::string&& window_name);
-    ~Window();
-    bool IsOpen();
-	void SetOpenGLViewport(uint32_t x_offset = 0,uint32_t y_offset = 0);// TODO(Tiago): extend to handle custom widhts and heights
-    void Update();
+    
+	Window(uint32_t width, uint32_t height, const std::string& window_name);
+    
+	Window(uint32_t width, uint32_t height, std::string&& window_name);
+    
+	~Window();
+    
+	bool IsOpen();
 	
-    private:
+	void SetOpenGLViewport(uint32_t x_offset = 0,uint32_t y_offset = 0);// TODO(Tiago): extend to handle custom widhts and heights
+    
+	void Update();
+	
+	void ClearViewport();
+	void ClearViewport(float clear_color[4]);
+	
+	private:
+	/*Makes this window the current opengl context*/
 	void MakeContextCurrent();
+	/*Unbinds the current opengl context*/
 	void MakeContextNonCurrent();
-	// NOTE(Tiago): Currently not workign properly, please dont use unless necessary
     /*Handles creating the GLFW window regardless of what constructor was used*/
     void CreateWindow();
     /*Polls Window Events*/
