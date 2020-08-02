@@ -72,5 +72,12 @@ int GPUProgram::GetUniformLocation(const std::string& uniform_name)
 
 void GPUProgram::SetMatrix4f(const std::string& uniform_name, const glm::mat4& matrix)
 {
+	this->Bind();
 	glUniformMatrix4fv(GetUniformLocation(uniform_name),1, GL_FALSE, &matrix[0][0]);
+}
+
+void GPUProgram::SetVec4f(const std::string& uniform_name, const glm::vec4& vector)
+{
+	this->Bind();
+	glUniform4fv(GetUniformLocation(uniform_name),1,&vector[0]);
 }

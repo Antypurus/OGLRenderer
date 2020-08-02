@@ -36,6 +36,7 @@ int main()
 		window.ClearViewport();
 		
 		shader.Bind();
+		shader.SetVec4f("u_color",glm::vec4{0.0f,1.0f,0.0f,1.0f});
 		vbo.Bind();
 		ib.Bind();
 		ib.Draw();

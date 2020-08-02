@@ -32,4 +32,5 @@ struct GPUProgram
 	void Bind();
 	int GetUniformLocation(const std::string& uniform_name);
 	void SetMatrix4f(const std::string& uniform_name, const glm::mat4& matrix);
+	void SetVec4f(const std::string& uniform_name, const glm::vec4& vector);
 };
