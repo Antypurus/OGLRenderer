@@ -19,10 +19,16 @@ int main()
 	
 	VertexBuffer<Vertex> vbo(vertices);
 	
-	Shader vs = {"./Resources/Shaders/base.glsl", ShaderType::Vertex};
+	Shader vs = {"./Resources/Shaders/base_vert.glsl", ShaderType::Vertex};
+	Shader fs = {"./Resources/Shaders/base_frag.glsl", ShaderType::Fragment};
+	GPUProgram shader = {vs, fs};
 	
     while(window.IsOpen())
     {
+		shader.Bind();
+		vbo.Bind();
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+		
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		
