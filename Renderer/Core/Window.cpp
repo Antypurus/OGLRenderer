@@ -45,8 +45,6 @@ void Window::MakeContextNonCurrent()
 
 void Window::CreateWindow()
 {
-    // NOTE(Tiago): In order to able to interact with a window from another thread we need to create the window on that thread. Since we want to have window event pools be independent from application framerate, we need to create the window in a thread and use that thread to poll its events.
-    
 	glfwInit();// NOTE(Tiago):  Initializes the GLFW library
 	
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_MAJOR);// NOTE(Tiago): OpenGL major version
@@ -56,6 +54,7 @@ void Window::CreateWindow()
 #if __APPLE__
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);// NOTE(Tiago): For MacOS compatibility
 #endif
+	
 	this->window_handle = glfwCreateWindow(width, height, name.c_str(), nullptr, nullptr); // NOTE(Tiago): Create the GLFW window
 	// TODO(Tiago): Log window creation attempt and status
 	

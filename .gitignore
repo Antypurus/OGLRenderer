@@ -61,5 +61,5 @@ x64
 
 # build ignores
 **/Release
-**/Win32
-**/x86
+*/Win32
+*/x86
