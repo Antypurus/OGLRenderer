@@ -65,6 +65,8 @@ x64
 */Win32
 */x86
 
+#glfw - glfw generates a header based on the system os we are using, so we dont want to have this header tracked to not cause issues with other os's
+**/glfw_config.h
 
 #jetbrain idea
 .idea
