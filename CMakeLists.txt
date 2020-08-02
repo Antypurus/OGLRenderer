@@ -33,6 +33,8 @@ if(OPENGL_FOUND)
     target_link_libraries(${CMAKE_PROJECT_NAME} ${OPENGL_LIBRARIES})
 endif()
 
+if(WIN32)
+add_compile_definitions(GLEW_STATIC)
 include_directories("ThirdParty/glew/include")
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     # 64 bits
@@ -41,9 +43,10 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
     # 32 bits
     target_link_libraries(${CMAKE_PROJECT_NAME} "ThirdParty/glew/lib/release/Win32/glew32s")
 endif()
-
-# GLEW_STATIC must be defined due to the usage of static linking with the GLEW library
-add_compile_definitions(GLEW_STATIC)
+else()
+find_package(GLEW REQUIRED)
+target_link_libraries(${CMAKE_PROJECT_NAME} GLEW::GLEW)
+endif()
 
 target_link_libraries(${PROJECT_NAME} glm)
 target_link_libraries(${PROJECT_NAME} glfw)

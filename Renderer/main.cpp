@@ -1,5 +1,4 @@
 #include<stdio.h>
-
 #include <GL/glew.h>
 #include "Core/Window.h"
 #include "Core/Shader.h"
@@ -11,9 +10,7 @@ int main()
 {
 	
     Window window = {800,600,"Window"};
-    
 	glewInit(); // Use GLEW to load modern OpenGL functions from the GPU driver, this must be done after creating the window.
-	
 	std::vector<Vertex> vertices = {
 		glm::vec3({-0.5f, -0.5f, 0.0f}),
 		glm::vec3({0.5f, -0.5f, 0.0f}),

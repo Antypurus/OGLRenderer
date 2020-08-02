@@ -45,6 +45,7 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 build
+cmake-build-debug
 
 #msvc ignores
 **.vcxproj
@@ -63,3 +64,7 @@ x64
 **/Release
 */Win32
 */x86
+
+
+#jetbrain idea
+.idea

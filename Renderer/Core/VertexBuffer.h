@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <vector>
 #include <glm/glm.hpp>
+#include <GL/glew.h>
 
 struct Vertex
 {
