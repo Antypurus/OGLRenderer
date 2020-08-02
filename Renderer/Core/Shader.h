@@ -2,6 +2,7 @@
 #pragma once
 #include <GL/glew.h>
 #include <string>
+#include <glm/glm.hpp>
 
 enum class ShaderType
 {
@@ -30,4 +31,5 @@ struct GPUProgram
 	~GPUProgram();
 	void Bind();
 	int GetUniformLocation(const std::string& uniform_name);
+	void SetMatrix4f(const std::string& uniform_name, const glm::mat4& matrix);
 };

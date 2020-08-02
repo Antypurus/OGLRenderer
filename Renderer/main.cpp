@@ -10,7 +10,7 @@
 int main()
 {
 	
-    Window window = {800,850,"Window"};
+    Window window = {800,800,"Window"};
 	glewInit(); // Use GLEW to load modern OpenGL functions from the GPU driver, this must be done after creating the window.
 	std::vector<Vertex> vertices = {
 		glm::vec3{0.5f,  0.5f, 0.0f},  // top right
