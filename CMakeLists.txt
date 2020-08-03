@@ -30,6 +30,9 @@ file(GLOB_RECURSE  SRCS
             "Renderer/*.hpp"
 	        "Renderer/*.h")
 
+#adds the stb_images sources to the project source files for compilation
+list(APPEND ${SRCS} "ThirdParty/stb/stb_image.cpp" "ThirdParyt/stb/stb_image.h")
+
 add_executable(${CMAKE_PROJECT_NAME} Renderer/main.cpp ${SRCS})
 
 find_package(OpenGL REQUIRED)
@@ -56,6 +59,7 @@ endif()
 target_link_libraries(${PROJECT_NAME} glm)
 target_link_libraries(${PROJECT_NAME} glfw)
 
+#adds the stb_image source files to the include path
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ThirdParty/stb)
 
 set_property(TARGET ${CMAKE_PROJECT_NAME} PROPERTY CXX_STANDARD 20) # Enable C++20 Support
