@@ -35,6 +35,8 @@ Texture::Texture(const std::string& texture_path)
 
 void Texture::Bind()
 {
+	// NOTE(Tiago): set texture unit slot
 	glActiveTexture(GL_TEXTURE0);
+	// NOTE(Tiago): bind texture for usage
 	glBindTexture(GL_TEXTURE_2D, this->texture_object);
 }
