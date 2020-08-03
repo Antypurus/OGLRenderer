@@ -7,15 +7,19 @@
 
 struct Vertex
 {
-	glm::vec3 position;
+	const glm::vec3 position;
+	const glm::vec2 uv;
 	
 	public:
-	Vertex(const glm::vec3& position):position(position){};
+	Vertex(const glm::vec3& position, const glm::vec2& uv):position(position), uv(uv){};
 	void SetVertexAttributes(uint32_t layout_slot = 0)
 	{
 		// TODO(Tiago): name it base layout slot?
-		glVertexAttribPointer(layout_slot, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(layout_slot);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+		
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+		glEnableVertexAttribArray(1);
 	}
 };
 
