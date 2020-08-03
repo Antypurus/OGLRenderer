@@ -11,6 +11,7 @@ struct Transform
 	glm::vec3 scale;
 	glm::vec3 rotation;
 	
+	Transform();
 	Transform(glm::vec3 position, glm::vec3 scale, glm::vec3 rotation);
 	glm::mat4x4 GenerateModelMatrix();
 	void Bind(const std::string& uniform_name, GPUProgram& shader);

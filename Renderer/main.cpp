@@ -7,6 +7,7 @@
 #include "Core/Texture.h"
 
 #include <iostream>
+#include "Transform.h"
 
 int main()
 {
@@ -34,12 +35,17 @@ int main()
 	
 	Texture texture = {"./Resources/Textures/test.jpg"};
 	
+	Transform model_matrix = {
+		glm::vec3{0.0f,0.0f,0.0f},
+		glm::vec3{1.0f,1.0f,1.0f},
+		glm::vec3{0.0f,0.0f,0.0f}
+	};
+
 	while(window.IsOpen())
 	{	
 		window.ClearViewport();
-		
+		model_matrix.Bind("model_matrix",shader);
 		shader.Bind();
-		shader.SetVec4f("u_color",glm::vec4{0.0f,1.0f,0.0f,1.0f});
 		texture.Bind();
 		vbo.Bind();
 		ib.Bind();

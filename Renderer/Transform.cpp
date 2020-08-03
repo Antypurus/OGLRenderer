@@ -5,6 +5,11 @@
 
 using namespace glm;
 
+Transform::Transform()
+:position(vec3{0,0,0}),scale(vec3{1,1,1,}),rotation(vec3{0,0,0})
+{
+}
+
 Transform::Transform(vec3 position, vec3 scale, vec3 rotation)
 :position(position), scale(scale), rotation(rotation)
 {
@@ -12,14 +17,14 @@ Transform::Transform(vec3 position, vec3 scale, vec3 rotation)
 
 mat4 Transform::GenerateModelMatrix()
 {
-	mat4 results = mat4x4{};
+	mat4 results = glm::mat4();
 	results *= translate(this->position);
-	results *= glm::scale(this->scale);
+	//results *= glm::scale(this->scale);
 	//NOTE(Tiago): rotate in each of the axis
-	results *= rotate(this->rotation[0], vec3{1,0,0});
-	results *= rotate(this->rotation[1], vec3{0,1,0});
-	results *= rotate(this->rotation[2], vec3{0,0,1});
-	results *= translate(-this->position);
+	//results *= rotate(this->rotation[0], vec3{1,0,0});
+	//results *= rotate(this->rotation[1], vec3{0,1,0});
+	//results *= rotate(this->rotation[2], vec3{0,0,1});
+	//results *= translate(-this->position);
 	return results;
 }
 
