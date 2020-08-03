@@ -17,13 +17,13 @@ Transform::Transform(vec3 position, vec3 scale, vec3 rotation)
 
 mat4 Transform::GenerateModelMatrix()
 {
-	mat4 results = glm::mat4();
+	glm::mat4 results = glm::mat4(1.0f);
 	results *= translate(this->position);
-	//results *= glm::scale(this->scale);
+	results *= glm::scale(this->scale);
 	//NOTE(Tiago): rotate in each of the axis
-	//results *= rotate(this->rotation[0], vec3{1,0,0});
-	//results *= rotate(this->rotation[1], vec3{0,1,0});
-	//results *= rotate(this->rotation[2], vec3{0,0,1});
+	results *= rotate(glm::radians(this->rotation[0]), vec3{1,0,0});
+	results *= rotate(glm::radians(this->rotation[1]), vec3{0,1,0});
+	results *= rotate(glm::radians(this->rotation[2]), vec3{0,0,1});
 	//results *= translate(-this->position);
 	return results;
 }

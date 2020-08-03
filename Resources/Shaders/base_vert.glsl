@@ -10,5 +10,5 @@ out vec2 tex_uv;
 void main()
 {
 	tex_uv = uv;
-	gl_Position = vec4(pos,1.0) * model_matrix;
+	gl_Position = model_matrix * vec4(pos,1.0);
 }
