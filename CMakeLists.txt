@@ -28,10 +28,9 @@ add_subdirectory(ThirdParty/glm)
 file(GLOB_RECURSE  SRCS
             "Renderer/*.cpp"
             "Renderer/*.hpp"
-	        "Renderer/*.h")
-
-#adds the stb_images sources to the project source files for compilation
-list(APPEND ${SRCS} "ThirdParty/stb/stb_image.cpp" "ThirdParyt/stb/stb_image.h")
+	        "Renderer/*.h"
+            "ThirdParty/stb/stb_image.cpp"
+            "ThirdParty/stb/stb_image.h")
 
 add_executable(${CMAKE_PROJECT_NAME} Renderer/main.cpp ${SRCS})
 
