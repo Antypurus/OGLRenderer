@@ -56,4 +56,6 @@ endif()
 target_link_libraries(${PROJECT_NAME} glm)
 target_link_libraries(${PROJECT_NAME} glfw)
 
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ThirdParty/stb)
+
 set_property(TARGET ${CMAKE_PROJECT_NAME} PROPERTY CXX_STANDARD 20) # Enable C++20 Support

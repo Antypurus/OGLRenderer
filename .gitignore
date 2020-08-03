@@ -46,6 +46,7 @@ CTestTestfile.cmake
 _deps
 build
 cmake-build-debug
+.cmake
 
 #msvc ignores
 **.vcxproj
