@@ -14,6 +14,7 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include <atomic>
+#include "Entity.h"
 
 void InitImGui(const Window& window)
 {
@@ -118,6 +119,8 @@ int main()
 		}
 		});
 
+	Entity object = { model_matrix, {vbo,ib,texture}, animation };
+
 	bool show = true;
 
 	uint64_t credit_count = 0;
@@ -141,14 +144,14 @@ int main()
 
 			if (animation.animating)
 			{
-				animation.PauseResumeToggle();
+				object.animation.PauseResumeToggle();
 			}
 			else
 			{
 				if (credit_count > 0)
 				{
 					credit_count--;
-					animation.Play();
+					object.animation.Play();
 				}
 			}
 		}
@@ -180,12 +183,7 @@ int main()
 		ImGuiRender();
 
 		shader.Bind();
-		Transform final_model = model_matrix + animation.current_transform;
-		final_model.Bind("model_matrix", shader);
-		texture.Bind();
-		vbo.Bind();
-		ib.Bind();
-		ib.Draw();
+		object.Draw(shader,"model_matrix");
 
 		window.Update();
 	}
