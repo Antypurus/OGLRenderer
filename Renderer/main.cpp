@@ -47,7 +47,7 @@ struct Game
 			glm::vec3{0.0f,0.0f,0.0f}
 		};
 
-		constexpr uint64_t entity_count = 10;
+		constexpr uint64_t entity_count = 50;
 		for (uint64_t entity_index = 0; entity_index < entity_count; ++entity_index)
 		{
 			Animation animation;
