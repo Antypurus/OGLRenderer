@@ -23,7 +23,6 @@ struct Animation
 	uint64_t duration = 0;
 	std::vector<Keyframe> keyframes;
 	Transform current_transform;
-	bool ended = false;
 	bool animating = false;
 	bool is_paused = false;
 

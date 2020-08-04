@@ -122,16 +122,7 @@ int main()
 	while(window.IsOpen())
 	{	
 		window.ClearViewport();
-		Transform final_model = model_matrix + animation.current_transform;
-		final_model.Bind("model_matrix",shader);
-		shader.Bind();
-		texture.Bind();
-		vbo.Bind();
-		ib.Bind();
-		ib.Draw();
-		
 		ImGuiStartFrame();
-
 		ImGui::BeginMainMenuBar();
 		bool selected = ImGui::Button("test");
 		if(selected)
@@ -151,8 +142,15 @@ int main()
 			}
 		}
 		ImGui::EndMainMenuBar();
-
 		ImGuiRender();
+
+		Transform final_model = model_matrix + animation.current_transform;
+		final_model.Bind("model_matrix", shader);
+		shader.Bind();
+		texture.Bind();
+		vbo.Bind();
+		ib.Bind();
+		ib.Draw();
 
 		window.Update();
 	}

@@ -55,16 +55,18 @@ void Animation::Play()
 {
 	using namespace std::chrono;
 
-	this->Stop();
+	//this->Stop();
 
 	this->playback_head = 0;
 	this->current_keyframe_index = 0;
-	this->should_stop = false;
 	this->current_transform = {
 							glm::vec3{0,0,0},
 							glm::vec3{0,0,0},
 							glm::vec3{0,0,0}
 	};
+	this->should_stop = false;
+	this->paused = false;
+	this->is_paused = false;
 	this->animating = true;
 
 	std::thread play_thread([this]() {
@@ -73,7 +75,6 @@ void Animation::Play()
 		{
 			if(this->should_stop)
 			{
-				this->ended = true;
 				this->animating = false;
 				return;
 			}
@@ -94,7 +95,6 @@ void Animation::Play()
 			// checks if animation should end
 			if (this->playback_head >= this->duration)
 			{
-				this->ended = true;
 				this->animating = false;
 				return;
 			}
