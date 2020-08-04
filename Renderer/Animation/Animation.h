@@ -24,10 +24,12 @@ struct Animation
 	std::vector<Keyframe> keyframes;
 	Transform current_transform;
 	bool ended = false;
+	bool animating = false;
+	bool is_paused = false;
 
 private:
 	bool should_stop = false;
-	bool pause = false;
+	bool paused = false;
 
 	public:
 	Animation();
@@ -35,6 +37,8 @@ private:
 	void AddKeyframe(const Keyframe& keyframe);
 	void Play();
 	void Stop();
+	void Pause();
+	void Resume();
 	
 	static Transform Interpolate(const Keyframe& start_keyframe, const Keyframe& end_keyframe, uint64_t playback_head);
 };

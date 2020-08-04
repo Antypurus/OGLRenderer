@@ -55,8 +55,17 @@ void Animation::Play()
 {
 	using namespace std::chrono;
 
+	this->Stop();
+
 	this->playback_head = 0;
 	this->current_keyframe_index = 0;
+	this->should_stop = false;
+	this->current_transform = {
+							glm::vec3{0,0,0},
+							glm::vec3{0,0,0},
+							glm::vec3{0,0,0}
+	};
+	this->animating = true;
 
 	std::thread play_thread([this]() {
 		uint64_t prev_time = time_point_cast<std::chrono::milliseconds>(high_resolution_clock::now()).time_since_epoch().count();
@@ -64,7 +73,15 @@ void Animation::Play()
 		{
 			if(this->should_stop)
 			{
+				this->ended = true;
+				this->animating = false;
 				return;
+			}
+
+			if(paused)
+			{
+				while (paused){}
+				prev_time = time_point_cast<std::chrono::milliseconds>(high_resolution_clock::now()).time_since_epoch().count();
 			}
 
 			uint64_t current_time = time_point_cast<std::chrono::milliseconds>(high_resolution_clock::now()).time_since_epoch().count();
@@ -78,6 +95,7 @@ void Animation::Play()
 			if (this->playback_head >= this->duration)
 			{
 				this->ended = true;
+				this->animating = false;
 				return;
 			}
 
@@ -118,6 +136,19 @@ void Animation::Play()
 void Animation::Stop()
 {
 	this->should_stop = true;
+	this->animating = false;
+}
+
+void Animation::Pause()
+{
+	this->is_paused = true;
+	this->paused = true;
+}
+
+void Animation::Resume()
+{
+	this->is_paused = false;
+	this->paused = false;
 }
 
 Transform Animation::Interpolate(const Keyframe& start_keyframe, const Keyframe& end_keyframe, uint64_t playback_head)

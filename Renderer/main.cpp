@@ -14,10 +14,44 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+void InitImGui(const Window& window)
+{
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+	// Setup Dear ImGui style
+	ImGui::StyleColorsDark();
+
+	// Setup Platform/Renderer bindings
+	ImGui_ImplGlfw_InitForOpenGL(window.window_handle, true);
+
+	// defines the glsl version to use by imgui
+	ImGui_ImplOpenGL3_Init("#version 330");
+}
+
+void ImGuiStartFrame()
+{
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
+}
+
+void ImGuiRender()
+{
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
 int main()
 {
     Window window = {800,800,"Window"};
+	
 	glewInit(); // Use GLEW to load modern OpenGL functions from the GPU driver, this must be done after creating the window.
+	InitImGui(window);
+	
 	std::vector<Vertex> vertices = {
 		{glm::vec3{0.5f,  0.5f, 0.0f},  glm::vec2{1.0f, 1.0f}},  // top right
 		{glm::vec3{0.5f, -0.5f, 0.0f},  glm::vec2{1.0f, 0.0f}},  // bottom right
@@ -83,25 +117,6 @@ int main()
 		}
 		});
 
-	animation.Play();
-
-	/*Imgui Initialization*/
-	// Setup Dear ImGui context
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
-	// Setup Dear ImGui style
-	ImGui::StyleColorsDark();
-	//ImGui::StyleColorsClassic();
-
-	// Setup Platform/Renderer bindings
-	ImGui_ImplGlfw_InitForOpenGL(window.window_handle, true);
-	ImGui_ImplOpenGL3_Init("#version 330");
-	/*ImGui Initialization end*/
-
 	bool show = true;
 
 	while(window.IsOpen())
@@ -115,13 +130,29 @@ int main()
 		ib.Bind();
 		ib.Draw();
 		
-		// Start the Dear ImGui frame
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
-		ImGui::ShowDemoWindow(&show);
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		ImGuiStartFrame();
+
+		ImGui::BeginMainMenuBar();
+		bool selected = ImGui::Button("test");
+		if(selected)
+		{
+			if(animation.animating)
+			{
+				if(animation.is_paused)
+				{
+					animation.Resume();
+				}else
+				{
+					animation.Pause();
+				}
+			}else
+			{
+				animation.Play();
+			}
+		}
+		ImGui::EndMainMenuBar();
+
+		ImGuiRender();
 
 		window.Update();
 	}
