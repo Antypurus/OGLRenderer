@@ -45,7 +45,7 @@ int main()
 	Animation animation;
 
 	animation.AddKeyframe(
-		{1000000,
+		{1000,
 		{
 			glm::vec3{0.0f,0.0f,0.0f},
 			glm::vec3{0.0f,0.0f,0.0f},
