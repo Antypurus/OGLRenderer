@@ -10,9 +10,12 @@
 #include "Transform.h"
 #include "Animation/Animation.h"
 
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
+
 int main()
 {
-	
     Window window = {800,800,"Window"};
 	glewInit(); // Use GLEW to load modern OpenGL functions from the GPU driver, this must be done after creating the window.
 	std::vector<Vertex> vertices = {
@@ -82,6 +85,25 @@ int main()
 
 	animation.Play();
 
+	/*Imgui Initialization*/
+	// Setup Dear ImGui context
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+	// Setup Dear ImGui style
+	ImGui::StyleColorsDark();
+	//ImGui::StyleColorsClassic();
+
+	// Setup Platform/Renderer bindings
+	ImGui_ImplGlfw_InitForOpenGL(window.window_handle, true);
+	ImGui_ImplOpenGL3_Init("#version 330");
+	/*ImGui Initialization end*/
+
+	bool show = true;
+
 	while(window.IsOpen())
 	{	
 		window.ClearViewport();
@@ -93,6 +115,14 @@ int main()
 		ib.Bind();
 		ib.Draw();
 		
+		// Start the Dear ImGui frame
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+		ImGui::ShowDemoWindow(&show);
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 		window.Update();
 	}
 
