@@ -10,6 +10,11 @@ Transform::Transform()
 {
 }
 
+Transform::Transform(const Transform& other)
+	:position(other.position),scale(other.scale),rotation(other.rotation)
+{
+}
+
 Transform::Transform(vec3 position, vec3 scale, vec3 rotation)
 :position(position), scale(scale), rotation(rotation)
 {
@@ -31,4 +36,11 @@ mat4 Transform::GenerateModelMatrix()
 void Transform::Bind(const std::string& uniform_name, GPUProgram& shader)
 {
 	shader.SetMatrix4f(uniform_name, this->GenerateModelMatrix());
+}
+
+void Transform::operator=(const Transform& other)
+{
+	this->position = other.position;
+	this->scale = other.scale;
+	this->rotation = other.rotation;
 }
