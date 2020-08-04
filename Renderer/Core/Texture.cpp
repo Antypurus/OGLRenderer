@@ -2,6 +2,11 @@
 #include <stb_image.h>
 #include <GL/glew.h>
 
+Texture::Texture(const Texture& other)
+	:texture_data(other.texture_data), texture_object(other.texture_object), width(other.width), height(other.height), channel_count(other.channel_count)
+{
+}
+
 Texture::Texture(const std::string& texture_path)
 :texture_data(nullptr, &std::free)
 {
@@ -17,7 +22,7 @@ Texture::Texture(const std::string& texture_path)
 	}
 	
 	// NOTE(Tiago): stb_image texture data must be freed with free and not delete, therefore we have to tell std::unique_ptr to use std::free instead of delete.
-	this->texture_data = std::unique_ptr<unsigned char, decltype(&std::free)>(texture_data, &std::free);
+	this->texture_data = std::shared_ptr<unsigned char>(texture_data, free);
 	
 	// NOTE(Tiago): create texture object
 	glGenTextures(1, &this->texture_object);

@@ -151,7 +151,6 @@ int main()
 					animation.Play();
 				}
 			}
-
 		}
 
 		bool credit_in_pressed = ImGui::Button("Credits In");
@@ -180,9 +179,9 @@ int main()
 
 		ImGuiRender();
 
+		shader.Bind();
 		Transform final_model = model_matrix + animation.current_transform;
 		final_model.Bind("model_matrix", shader);
-		shader.Bind();
 		texture.Bind();
 		vbo.Bind();
 		ib.Bind();
