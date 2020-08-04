@@ -5,3 +5,5 @@ To compile this code run cmake. The is a script that tries to install all potent
 For windows there should be no problems as all required dependencies should be in the ThirdParty folder. Do keep in mind that if you use cmake in a separate folder not all files of the ThirdParty folder are copied and you might be missing some lib's particularly for glfw, in this case I recommend just copying over the glfw folder to the build folder/ThirdParty. If you use cmake on the root you should have no issues compiling.
 
 The resources must be present wherever you run the executable from, as it contains texture and shaders required.
+
+Github repo: https://github.com/TiagoJoseMagalhaes/OGLRenderer
