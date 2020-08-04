@@ -25,7 +25,7 @@ struct Animation
 	Transform current_transform;
 	
 	public:
-	Animation() = default;
+	Animation();
 	void AddKeyframe(const Keyframe& keyframe);
 	void Play();
 	

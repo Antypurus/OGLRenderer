@@ -8,7 +8,7 @@ Keyframe::Keyframe(const uint64_t& delta_t, const Transform& transform_delta)
 }
 
 Keyframe::Keyframe(const Keyframe& other)
-	:end_time(0),delta_t(other.delta_t),transform_delta(other.transform_delta)
+	: end_time(0), delta_t(other.delta_t), transform_delta(other.transform_delta)
 {
 }
 
@@ -17,6 +17,15 @@ void Keyframe::operator=(const Keyframe& other)
 	this->end_time = 0;
 	this->delta_t = other.delta_t;
 	this->transform_delta = other.transform_delta;
+}
+
+Animation::Animation()
+{
+	this->current_transform = {
+							glm::vec3{0,0,0},
+							glm::vec3{0,0,0},
+							glm::vec3{0,0,0}
+	};
 }
 
 void Animation::AddKeyframe(const Keyframe& keyframe)
@@ -56,7 +65,7 @@ void Animation::Play()
 			this->playback_head += delta;
 
 			// checks if animation should end
-			if (this->playback_head > this->duration)
+			if (this->playback_head >= this->duration)
 			{
 				return;
 			}
@@ -65,14 +74,14 @@ void Animation::Play()
 			while (this->playback_head > this->keyframes[this->current_keyframe_index].end_time)
 			{
 				this->current_keyframe_index++;
-				if(this->current_keyframe_index = this->keyframes.size())
+				if (this->current_keyframe_index = this->keyframes.size())
 				{
 					return;
 				}
 			}
 
 			//compute the current transform
-			if (this->current_keyframe_index > 1)
+			if (this->current_keyframe_index >= 1)
 			{
 				this->current_transform = Animation::Interpolate(
 					this->keyframes[this->current_keyframe_index - 1],
@@ -126,7 +135,8 @@ Transform Animation::Interpolate(const Keyframe& start_keyframe, const Keyframe&
 		};
 
 		return { position,scale,rotation };
-	}else
+	}
+	else
 	{
 		return {};
 	}
