@@ -29,6 +29,7 @@ Transform Transform::operator+(const Transform& other)
 	};
 }
 
+// generate a model matrix by first rotating, then scaling and then translating. Due to matrix multiplication rules this is inversed in the actual multiplication process.
 mat4 Transform::GenerateModelMatrix()
 {
 	glm::mat4 results = glm::mat4(1.0f);
@@ -38,10 +39,10 @@ mat4 Transform::GenerateModelMatrix()
 	results *= rotate(glm::radians(this->rotation[0]), vec3{1,0,0});
 	results *= rotate(glm::radians(this->rotation[1]), vec3{0,1,0});
 	results *= rotate(glm::radians(this->rotation[2]), vec3{0,0,1});
-	//results *= translate(-this->position);
 	return results;
 }
 
+// binds this transform model matrix to a glsl uniform
 void Transform::Bind(const std::string& uniform_name, GPUProgram& shader)
 {
 	shader.SetMatrix4f(uniform_name, this->GenerateModelMatrix());

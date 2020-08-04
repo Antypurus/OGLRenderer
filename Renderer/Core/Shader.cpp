@@ -7,6 +7,7 @@ Shader::Shader(const std::string& shader_source_path,  const ShaderType& shader_
 	std::ifstream file_read(shader_source_path);
 	std::string source;
 	std::string line;
+	//reads the glsl source code
 	if (file_read.is_open())
 	{
 		while (std::getline(file_read, line))
@@ -18,6 +19,7 @@ Shader::Shader(const std::string& shader_source_path,  const ShaderType& shader_
 		return;
 	}
 	
+	// creates shader objects and copies overr the source code
 	this->shader_object = glCreateShader(static_cast<GLenum>(shader_type));
 	const char* shader_program_source = source.c_str();
 	glShaderSource(shader_object, 1, &shader_program_source, NULL);
@@ -40,6 +42,7 @@ GPUProgram::GPUProgram(const Shader& vertex_shader, const Shader& fragment_shade
 {
 	this->gpu_program_object = glCreateProgram();
 	
+	//links the vertex and pixel shader into a single shader gpu program
 	glAttachShader(this->gpu_program_object ,vertex_shader.shader_object);
 	glAttachShader(this->gpu_program_object ,fragment_shader.shader_object);
 	glLinkProgram(this->gpu_program_object);
@@ -65,17 +68,20 @@ void GPUProgram::Bind()
 	glUseProgram(this->gpu_program_object);
 }
 
+//finds a "reference" to a glsl uniform that can be use to interact with that uniform data
 int GPUProgram::GetUniformLocation(const std::string& uniform_name)
 {
 	return glGetUniformLocation(this->gpu_program_object, uniform_name.c_str());
 }
 
+//writes a 4x4 matrix into the uniform
 void GPUProgram::SetMatrix4f(const std::string& uniform_name, const glm::mat4& matrix)
 {
 	this->Bind();
 	glUniformMatrix4fv(GetUniformLocation(uniform_name),1, GL_FALSE, &matrix[0][0]);
 }
 
+//writes a 4 element vector into the uniform
 void GPUProgram::SetVec4f(const std::string& uniform_name, const glm::vec4& vector)
 {
 	this->Bind();

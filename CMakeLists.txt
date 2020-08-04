@@ -37,10 +37,8 @@ file(GLOB_RECURSE  SRCS
 add_executable(${CMAKE_PROJECT_NAME} Renderer/main.cpp ${SRCS})
 
 find_package(OpenGL REQUIRED)
-if(OPENGL_FOUND)
-    include_directories( ${OPENGL_INCLUDE_DIRS})
-    target_link_libraries(${CMAKE_PROJECT_NAME} ${OPENGL_LIBRARIES})
-endif()
+include_directories( ${OPENGL_INCLUDE_DIRS})
+target_link_libraries(${CMAKE_PROJECT_NAME} ${OPENGL_LIBRARIES})
 
 if(WIN32)
     add_compile_definitions(GLEW_STATIC)

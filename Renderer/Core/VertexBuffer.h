@@ -12,6 +12,8 @@ struct Vertex
 
 public:
 	Vertex(const glm::vec3& position, const glm::vec2& uv) :position(position), uv(uv) {};
+
+	// this function define the vertex data layout for opengl, in this case we have a 3 position floats and 2 texture coordinate floats
 	void SetVertexAttributes(uint32_t layout_slot = 0)
 	{
 		// TODO(Tiago): name it base layout slot?

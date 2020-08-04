@@ -33,10 +33,13 @@ Animation::~Animation()
 	this->Stop();
 }
 
+// adds a keyframe to the animation
 void Animation::AddKeyframe(const Keyframe& keyframe)
 {
 	this->keyframes.push_back(keyframe);
 	this->duration += keyframe.delta_t;
+	// when adding a keyframe to the animation, its end time will be determined by taking in the end time of the previous keyframe and adding the duration of the new keyframe
+	// keyframe end time is used to determine the keyframes that are being interpolated between for the animation
 	if (this->keyframes.size() == 1)
 	{
 		// NOTE(Tiago): fist keyframe added. Start time = 0
@@ -53,6 +56,7 @@ void Animation::AddKeyframe(const Keyframe& keyframe)
 
 void Animation::Play()
 {
+	// starts the animation process by reseting values and obtaining the current time
 	using namespace std::chrono;
 	this->playback_head = 0;
 	this->current_keyframe_index = 0;
@@ -81,6 +85,7 @@ void Animation::Pause()
 
 void Animation::Resume()
 {
+	// when the animation is resumed we need to update the previous time so that when updating we have a delta between time samples of 0 and the animation continues from where it left off
 	using namespace std::chrono;
 	this->paused = false;
 	prev_time = time_point_cast<std::chrono::milliseconds>(high_resolution_clock::now()).time_since_epoch().count();
@@ -98,6 +103,7 @@ void Animation::PauseResumeToggle()
 	}
 }
 
+// adds a std::function that will be called when the animation proccess ends
 void Animation::AddAnimationEndCallback(const std::function<void()>& callback)
 {
 	this->animation_end_callbacks.push_back(callback);
@@ -109,19 +115,21 @@ void Animation::Update()
 
 	if (this->animating)
 	{
+		//if the stop flag is active dont animate
 		if (this->should_stop)
 		{
 			this->animating = false;
 			return;
 		}
 
+		//if the animation is paused dont animate
 		if (paused)
 		{
 			return;
 		}
 
+		//obtain the current time and compute the time delta between samples
 		uint64_t current_time = time_point_cast<std::chrono::milliseconds>(high_resolution_clock::now()).time_since_epoch().count();
-
 		uint64_t delta = current_time - prev_time;
 
 		//updates playback head
@@ -145,12 +153,14 @@ void Animation::Update()
 		//compute the current transform
 		if (this->current_keyframe_index > 0)
 		{
+			//interpolates between the transform of two keyframes
 			this->current_transform = Animation::Interpolate(
 				this->keyframes[this->current_keyframe_index - 1],
 				this->keyframes[this->current_keyframe_index],
 				this->playback_head);
 		}
 		else {
+			//interpolates between the transform of two keyframes
 			this->current_transform = Animation::Interpolate(
 				{
 					0,
@@ -164,14 +174,17 @@ void Animation::Update()
 				this->playback_head);
 		}
 
+		// update the value of the previous time time sample
 		prev_time = current_time;
 	}
 }
 
+//computes the interpolation of the transform of two keyframes
 Transform Animation::Interpolate(const Keyframe& start_keyframe, const Keyframe& end_keyframe, uint64_t playback_head)
 {
 	Transform start = start_keyframe.transform_delta;
 	Transform end = end_keyframe.transform_delta;
+	// brings the playback head into a range that is meaningful to compute the "percent" of each keyframe that should be in the final transform
 	uint64_t len = end_keyframe.end_time - start_keyframe.end_time;
 	uint64_t head = playback_head - start_keyframe.end_time;
 	float index_delta = (float)head / (float)len;
@@ -204,6 +217,7 @@ Transform Animation::Interpolate(const Keyframe& start_keyframe, const Keyframe&
 	}
 }
 
+// executes all registed animation end callback functions
 void Animation::ExecuteCallbacks()
 {
 	for (auto& callback : animation_end_callbacks)

@@ -27,9 +27,11 @@ Entity::Entity(const Transform& transform, const Model& model, const Animation& 
 {
 }
 
+// draws an entity
 void Entity::Draw(GPUProgram& shader, const std::string& model_matrix_uniform_name)
 {
 	this->model.Bind();
+	// if it has an animation the model matrix used takes in the animation transform model matrix
 	if(this->has_animation)
 	{
 		Transform final_transform = this->transform + animation.current_transform;
