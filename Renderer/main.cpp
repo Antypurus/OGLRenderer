@@ -97,7 +97,7 @@ struct Game
 			float y = ((entity_index % 8) / 8.0f) * separation_scalar;
 
 			Transform delta_transform = {
-				glm::vec3{ x, y,0},
+				glm::vec3{ x, y, 0},
 				glm::vec3{0,0,0},
 				glm::vec3{0,0,0}
 			};
@@ -168,8 +168,6 @@ void InitImGui(const Window& window)
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
 	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
@@ -196,7 +194,7 @@ void ImGuiRender()
 
 int main()
 {
-	Window window = { 800,800,"Window" };
+	Window window = { 800,800,"Fabamaq Take Home Test" };
 
 	glewInit(); // Use GLEW to load modern OpenGL functions from the GPU driver, this must be done after creating the window.
 	InitImGui(window);
