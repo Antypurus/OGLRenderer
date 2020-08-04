@@ -26,15 +26,15 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 add_subdirectory(ThirdParty/glm)
 
 file(GLOB_RECURSE  SRCS
-            "Fabamaq/*.cpp"
-            "Fabamaq/*.hpp"
+            "fabamaq/*.cpp"
+            "fabamaq/*.hpp"
 	        "Fabamaq/*.h"
             "ThirdParty/stb/stb_image.cpp"
             "ThirdParty/stb/stb_image.h"
             "ThirdParty/ImGui/*.cpp"
             "ThirdParty/ImGui/*.h")
 
-add_executable(${CMAKE_PROJECT_NAME} Fabamaq/main.cpp ${SRCS})
+add_executable(${CMAKE_PROJECT_NAME} fabamaq/main.cpp ${SRCS})
 
 find_package(OpenGL REQUIRED)
 include_directories( ${OPENGL_INCLUDE_DIRS})
