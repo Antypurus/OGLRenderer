@@ -54,10 +54,18 @@ void Animation::Play()
 				}
 
 				//compute the current transform
+				if(this->keyframes.size() > 1)
+				{
 				this->current_transform = Animation::Interpolate(
 					this->keyframes[this->current_keyframe_index],
 					this->keyframes[this->current_keyframe_index + 1],
 					this->playback_head);
+				} else {
+					this->current_transform = Animation::Interpolate(
+					{},
+					this->keyframes[this->current_keyframe_index],
+					this->playback_head);
+				}
 
 				prev_time = high_resolution_clock::now();
 			}

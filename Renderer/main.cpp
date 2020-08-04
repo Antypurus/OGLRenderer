@@ -44,7 +44,7 @@ int main()
 
 	Animation animation;
 
-	animation.AddKeyframe({10000,{
+	animation.AddKeyframe({100000,{
 			glm::vec3{0.0f,0.0f,0.0f},
 			glm::vec3{0.0f,0.0f,0.0f},
 			glm::vec3{0.0f,0.0f,90.0f}
@@ -55,7 +55,8 @@ int main()
 	while(window.IsOpen())
 	{	
 		window.ClearViewport();
-		model_matrix.Bind("model_matrix",shader);
+		Transform final_model = model_matrix + animation.current_transform;
+		final_model.Bind("model_matrix",shader);
 		shader.Bind();
 		texture.Bind();
 		vbo.Bind();

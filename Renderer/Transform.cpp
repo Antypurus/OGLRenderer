@@ -20,6 +20,15 @@ Transform::Transform(vec3 position, vec3 scale, vec3 rotation)
 {
 }
 
+Transform Transform::operator+(const Transform& other)
+{
+	return {
+		this->position + other.position,
+		this->scale + other.scale,
+		this->rotation + other.rotation
+	};
+}
+
 mat4 Transform::GenerateModelMatrix()
 {
 	glm::mat4 results = glm::mat4(1.0f);
