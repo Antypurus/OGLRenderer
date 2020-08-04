@@ -65,19 +65,30 @@ void Animation::Play()
 			while (this->playback_head > this->keyframes[this->current_keyframe_index].end_time)
 			{
 				this->current_keyframe_index++;
+				if(this->current_keyframe_index = this->keyframes.size())
+				{
+					return;
+				}
 			}
 
 			//compute the current transform
-			if (this->keyframes.size() > 1)
+			if (this->current_keyframe_index > 1)
 			{
 				this->current_transform = Animation::Interpolate(
+					this->keyframes[this->current_keyframe_index - 1],
 					this->keyframes[this->current_keyframe_index],
-					this->keyframes[this->current_keyframe_index + 1],
 					this->playback_head);
 			}
 			else {
 				this->current_transform = Animation::Interpolate(
-					{},
+					{
+						0,
+						{
+							glm::vec3{0,0,0},
+							glm::vec3{0,0,0},
+							glm::vec3{0,0,0}
+						}
+					},
 					this->keyframes[this->current_keyframe_index],
 					this->playback_head);
 			}
@@ -97,21 +108,21 @@ Transform Animation::Interpolate(const Keyframe& start_keyframe, const Keyframe&
 	if (index_delta != 0.0)
 	{
 		glm::vec3 position = {
-			start.position.x + (end.position.x - start.position.x) * index_delta,
-			start.position.y + (end.position.y - start.position.y) * index_delta,
-			start.position.z + (end.position.z - start.position.z) * index_delta
+			start.position.x + (end.position.x) * index_delta,
+			start.position.y + (end.position.y) * index_delta,
+			start.position.z + (end.position.z) * index_delta
 		};
 
 		glm::vec3 rotation = {
-			start.rotation.x + (end.rotation.x - start.rotation.x) * index_delta,
-			start.rotation.y + (end.rotation.y - start.rotation.y) * index_delta,
-			start.rotation.z + (end.rotation.z - start.rotation.z) * index_delta
+			start.rotation.x + (end.rotation.x) * index_delta,
+			start.rotation.y + (end.rotation.y) * index_delta,
+			start.rotation.z + (end.rotation.z) * index_delta
 		};
 
 		glm::vec3 scale = {
-			start.scale.x + (end.scale.x - start.scale.x) * index_delta,
-			start.scale.y + (end.scale.y - start.scale.y) * index_delta,
-			start.scale.z + (end.scale.z - start.scale.z) * index_delta
+			start.scale.x + (end.scale.x) * index_delta,
+			start.scale.y + (end.scale.y) * index_delta,
+			start.scale.z + (end.scale.z) * index_delta
 		};
 
 		return { position,scale,rotation };
