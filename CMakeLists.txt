@@ -30,7 +30,9 @@ file(GLOB_RECURSE  SRCS
             "Renderer/*.hpp"
 	        "Renderer/*.h"
             "ThirdParty/stb/stb_image.cpp"
-            "ThirdParty/stb/stb_image.h")
+            "ThirdParty/stb/stb_image.h"
+            "ThirdParty/ImGui/*.cpp"
+            "ThirdParty/ImGui/*.h")
 
 add_executable(${CMAKE_PROJECT_NAME} Renderer/main.cpp ${SRCS})
 
@@ -60,5 +62,8 @@ target_link_libraries(${PROJECT_NAME} glfw)
 
 #adds the stb_image source files to the include path
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ThirdParty/stb)
+
+#adds the dear ImGui source files to the include pth
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ThirdParty/ImGui)
 
 set_property(TARGET ${CMAKE_PROJECT_NAME} PROPERTY CXX_STANDARD 20) # Enable C++20 Support
