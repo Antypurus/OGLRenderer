@@ -138,25 +138,27 @@ int main()
 		bool start_pressed = ImGui::Button("Start");
 		if (start_pressed)
 		{
-			if (credit_count > 0)
+
+			if (animation.animating)
 			{
-				credit_count--;
-				if (animation.animating)
+				if (animation.is_paused)
 				{
-					if (animation.is_paused)
-					{
-						animation.Resume();
-					}
-					else
-					{
-						animation.Pause();
-					}
+					animation.Resume();
 				}
 				else
 				{
+					animation.Pause();
+				}
+			}
+			else
+			{
+				if (credit_count > 0)
+				{
+					credit_count--;
 					animation.Play();
 				}
 			}
+
 		}
 
 		bool credit_in_pressed = ImGui::Button("Credits In");
