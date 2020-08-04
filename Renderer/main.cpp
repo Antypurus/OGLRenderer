@@ -43,16 +43,24 @@ struct Game
 
 		Transform model_matrix = {
 			glm::vec3{0.0f,0.0f,0.0f},
-			glm::vec3{1.0f,1.0f,1.0f},
+			glm::vec3{0.1f,0.1f,0.1f},
 			glm::vec3{0.0f,0.0f,0.0f}
 		};
 
 		constexpr uint64_t entity_count = 50;
 		for (uint64_t entity_index = 0; entity_index < entity_count; ++entity_index)
 		{
+			const uint64_t time_delta = entity_index*200;
 			Animation animation;
+			animation.AddKeyframe({ 0 + time_delta,
+				{
+					glm::vec3{0.0f,0.0f,0.0f},
+					glm::vec3{0.0f,0.0f,0.0f},
+					glm::vec3{0.0f,0.0f,0.0f}
+				}
+				});
 			animation.AddKeyframe(
-				{ 1000,
+				{ 1000 + time_delta,
 				{
 					glm::vec3{0.0f,0.0f,0.0f},
 					glm::vec3{0.0f,0.0f,0.0f},
@@ -60,7 +68,7 @@ struct Game
 				}
 				});
 			animation.AddKeyframe(
-				{ 1000,
+				{ 1000 + time_delta,
 				{
 					glm::vec3{0.0f,0.0f,0.0f},
 					glm::vec3{0.0f,0.0f,0.0f},
@@ -68,7 +76,7 @@ struct Game
 				}
 				});
 			animation.AddKeyframe(
-				{ 1000,
+				{ 1000 + time_delta,
 				{
 					glm::vec3{0.0f,0.0f,0.0f},
 					glm::vec3{0.0f,0.0f,0.0f},
@@ -76,7 +84,7 @@ struct Game
 				}
 				});
 			animation.AddKeyframe(
-				{ 1000,
+				{ 1000 + time_delta,
 				{
 					glm::vec3{0.0f,0.0f,0.0f},
 					glm::vec3{0.0f,0.0f,0.0f},
@@ -84,7 +92,13 @@ struct Game
 				}
 				});
 
-			Entity entity = { model_matrix, model, animation};
+			Transform delta_transform = {
+				glm::vec3{ (entity_index % 7)  - 0.9f,(entity_index % 7)/7.0f,0},
+				glm::vec3{0,0,0},
+				glm::vec3{0,0,0}
+			};
+
+			Entity entity = { model_matrix + delta_transform, model, animation};
 
 			this->entities.push_back(entity);
 
