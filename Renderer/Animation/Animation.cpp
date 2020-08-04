@@ -36,7 +36,7 @@ void Animation::Play()
 			while(this->playback_head <= this->duration)
 			{
 				high_resolution_clock::time_point curr_time = high_resolution_clock::now();
-				uint64_t delta = duration_cast<std::chrono::nanoseconds>(curr_time - prev_time).count();
+				uint64_t delta = duration_cast<std::chrono::milliseconds>(curr_time - prev_time).count();
 
 				//updates playback head
 				this->playback_head += delta;

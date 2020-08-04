@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include "Transform.h"
+#include "Animation/Animation.h"
 
 int main()
 {
@@ -38,8 +39,18 @@ int main()
 	Transform model_matrix = {
 		glm::vec3{1.0f,0.0f,0.0f},
 		glm::vec3{1.0f,1.0f,1.0f},
-		glm::vec3{0.0f,0.0f,90.0f}
+		glm::vec3{0.0f,0.0f,0.0f}
 	};
+
+	Animation animation;
+
+	animation.AddKeyframe({10000,{
+			glm::vec3{0.0f,0.0f,0.0f},
+			glm::vec3{0.0f,0.0f,0.0f},
+			glm::vec3{0.0f,0.0f,90.0f}
+		}});
+
+	animation.Play();
 
 	while(window.IsOpen())
 	{	
