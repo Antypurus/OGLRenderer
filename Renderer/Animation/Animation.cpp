@@ -8,13 +8,13 @@ Keyframe::Keyframe(const uint64_t& delta_t, const Transform& transform_delta)
 }
 
 Keyframe::Keyframe(const Keyframe& other)
-	: end_time(0), delta_t(other.delta_t), transform_delta(other.transform_delta)
+	: end_time(other.end_time), delta_t(other.delta_t), transform_delta(other.transform_delta)
 {
 }
 
 void Keyframe::operator=(const Keyframe& other)
 {
-	this->end_time = 0;
+	this->end_time = other.end_time;
 	this->delta_t = other.delta_t;
 	this->transform_delta = other.transform_delta;
 }
@@ -41,7 +41,7 @@ void Animation::AddKeyframe(const Keyframe& keyframe)
 	{
 		// NOTE(Tiago): not the first keyframe. Start time = Start Time of Previous Keyframe + previous keyframe duration
 		const size_t keyframe_index = this->keyframes.size() - 1;
-		const uint64_t end_time = this->keyframes[keyframe_index - 1].end_time + this->keyframes[keyframe_index - 1].delta_t;
+		const uint64_t end_time = this->keyframes[keyframe_index - 1].end_time + keyframe.delta_t;
 		this->keyframes[keyframe_index].end_time = end_time;
 	}
 }
