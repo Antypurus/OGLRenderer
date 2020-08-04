@@ -16,7 +16,6 @@ Texture::Texture(const std::string& texture_path)
 	if(texture_data == nullptr)
 	{
 		// NOTE(Tiago): failed to read texture
-		// TODO(Tiago): how do i want to handle this error without using exceptions
 		printf("Unable to read texture data\n");
 		return;
 	}

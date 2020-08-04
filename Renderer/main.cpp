@@ -38,8 +38,18 @@ struct Game
 		};
 		VertexBuffer<Vertex> vbo(vertices);
 		IndexBuffer ib(indices);
-		Texture texture = { "./Resources/Textures/test.jpg" };
-		Model model = {vbo, ib, texture};
+
+		Texture texture1 = { "./Resources/Textures/tex1.png" };
+		Texture texture2 = { "./Resources/Textures/tex2.jpg" };
+		Texture texture3 = { "./Resources/Textures/tex3.jpg" };
+		Texture texture4 = { "./Resources/Textures/tex4.png" };
+		
+		Model model1 = {vbo, ib, texture1};
+		Model model2 = {vbo, ib, texture2};
+		Model model3 = {vbo, ib, texture3};
+		Model model4 = {vbo, ib, texture4};
+
+		Model models[] = {model1,model2,model3,model4};
 
 		Transform model_matrix = {
 			glm::vec3{-0.8f,-0.8f,0.0f},
@@ -102,7 +112,7 @@ struct Game
 				glm::vec3{0,0,0}
 			};
 
-			Entity entity = { model_matrix + delta_transform, model, animation};
+			Entity entity = { model_matrix + delta_transform, models[entity_index % 4], animation};
 
 			this->entities.push_back(entity);
 
