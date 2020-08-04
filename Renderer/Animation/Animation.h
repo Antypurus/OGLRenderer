@@ -6,12 +6,14 @@
 
 struct Keyframe
 {
-	uint64_t start_time = 0;
+	uint64_t end_time = 0;
 	uint64_t delta_t = 0;
 	Transform transform_delta;
 	
 	Keyframe() = default;
 	Keyframe(const uint64_t& delta_t, const Transform& transform_delta);
+	Keyframe(const Keyframe& other);
+	void operator=(const Keyframe& other);
 };
 
 struct Animation
