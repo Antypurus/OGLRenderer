@@ -54,9 +54,6 @@ void Animation::AddKeyframe(const Keyframe& keyframe)
 void Animation::Play()
 {
 	using namespace std::chrono;
-
-	//this->Stop();
-
 	this->playback_head = 0;
 	this->current_keyframe_index = 0;
 	this->current_transform = {
@@ -67,70 +64,7 @@ void Animation::Play()
 	this->should_stop = false;
 	this->paused = false;
 	this->animating = true;
-
-	std::thread play_thread([this]() {
-		uint64_t prev_time = time_point_cast<std::chrono::milliseconds>(high_resolution_clock::now()).time_since_epoch().count();
-		while (this->playback_head <= this->duration)
-		{
-			if(this->should_stop)
-			{
-				this->animating = false;
-				return;
-			}
-
-			if(paused)
-			{
-				while (paused){}
-				prev_time = time_point_cast<std::chrono::milliseconds>(high_resolution_clock::now()).time_since_epoch().count();
-			}
-
-			uint64_t current_time = time_point_cast<std::chrono::milliseconds>(high_resolution_clock::now()).time_since_epoch().count();
-
-			uint64_t delta = current_time - prev_time;
-
-			//updates playback head
-			this->playback_head += delta;
-
-			// checks if animation should end
-			if (this->playback_head >= this->duration)
-			{
-				this->ExecuteCallbacks();
-				this->animating = false;
-				return;
-			}
-
-			//updates the current keyframe
-			while (this->playback_head > this->keyframes[this->current_keyframe_index].end_time)
-			{
-				this->current_keyframe_index++;
-			}
-
-			//compute the current transform
-			if (this->current_keyframe_index > 0)
-			{
-				this->current_transform = Animation::Interpolate(
-					this->keyframes[this->current_keyframe_index - 1],
-					this->keyframes[this->current_keyframe_index],
-					this->playback_head);
-			}
-			else {
-				this->current_transform = Animation::Interpolate(
-					{
-						0,
-						{
-							glm::vec3{0,0,0},
-							glm::vec3{0,0,0},
-							glm::vec3{0,0,0}
-						}
-					},
-					this->keyframes[this->current_keyframe_index],
-					this->playback_head);
-			}
-
-			prev_time = current_time;
-		}
-		});
-	play_thread.detach();
+	prev_time = time_point_cast<std::chrono::milliseconds>(high_resolution_clock::now()).time_since_epoch().count();
 }
 
 void Animation::Stop()
@@ -147,15 +81,18 @@ void Animation::Pause()
 
 void Animation::Resume()
 {
+	using namespace std::chrono;
 	this->paused = false;
+	prev_time = time_point_cast<std::chrono::milliseconds>(high_resolution_clock::now()).time_since_epoch().count();
 }
 
 void Animation::PauseResumeToggle()
 {
-	if(this->paused)
+	if (this->paused)
 	{
 		this->Resume();
-	}else
+	}
+	else
 	{
 		this->Pause();
 	}
@@ -164,6 +101,71 @@ void Animation::PauseResumeToggle()
 void Animation::AddAnimationEndCallback(const std::function<void()>& callback)
 {
 	this->animation_end_callbacks.push_back(callback);
+}
+
+void Animation::Update()
+{
+	using namespace std::chrono;
+
+	if (this->animating)
+	{
+		if (this->should_stop)
+		{
+			this->animating = false;
+			return;
+		}
+
+		if (paused)
+		{
+			return;
+		}
+
+		uint64_t current_time = time_point_cast<std::chrono::milliseconds>(high_resolution_clock::now()).time_since_epoch().count();
+
+		uint64_t delta = current_time - prev_time;
+
+		//updates playback head
+		this->playback_head += delta;
+
+		// checks if animation should end
+		if (this->playback_head >= this->duration)
+		{
+			this->ExecuteCallbacks();
+			this->animating = false;
+			this->current_transform = this->keyframes[this->keyframes.size() - 1].transform_delta;
+			return;
+		}
+
+		//updates the current keyframe
+		while (this->playback_head > this->keyframes[this->current_keyframe_index].end_time)
+		{
+			this->current_keyframe_index++;
+		}
+
+		//compute the current transform
+		if (this->current_keyframe_index > 0)
+		{
+			this->current_transform = Animation::Interpolate(
+				this->keyframes[this->current_keyframe_index - 1],
+				this->keyframes[this->current_keyframe_index],
+				this->playback_head);
+		}
+		else {
+			this->current_transform = Animation::Interpolate(
+				{
+					0,
+					{
+						glm::vec3{0,0,0},
+						glm::vec3{0,0,0},
+						glm::vec3{0,0,0}
+					}
+				},
+				this->keyframes[this->current_keyframe_index],
+				this->playback_head);
+		}
+
+		prev_time = current_time;
+	}
 }
 
 Transform Animation::Interpolate(const Keyframe& start_keyframe, const Keyframe& end_keyframe, uint64_t playback_head)
@@ -204,7 +206,7 @@ Transform Animation::Interpolate(const Keyframe& start_keyframe, const Keyframe&
 
 void Animation::ExecuteCallbacks()
 {
-	for(auto& callback:animation_end_callbacks)
+	for (auto& callback : animation_end_callbacks)
 	{
 		callback();
 	}

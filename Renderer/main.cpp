@@ -138,6 +138,7 @@ struct Game
 	{
 		for (Entity& entity : entities)
 		{
+			entity.animation.Update();
 			entity.Draw(shader, model_matrix_uniform_name);
 		}
 	}
