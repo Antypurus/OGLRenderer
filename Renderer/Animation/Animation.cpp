@@ -67,6 +67,7 @@ void Animation::Play()
 			// checks if animation should end
 			if (this->playback_head >= this->duration)
 			{
+				this->ended = true;
 				return;
 			}
 
@@ -77,7 +78,7 @@ void Animation::Play()
 			}
 
 			//compute the current transform
-			if (this->current_keyframe_index >= 1)
+			if (this->current_keyframe_index > 0)
 			{
 				this->current_transform = Animation::Interpolate(
 					this->keyframes[this->current_keyframe_index - 1],
@@ -108,7 +109,9 @@ Transform Animation::Interpolate(const Keyframe& start_keyframe, const Keyframe&
 {
 	Transform start = start_keyframe.transform_delta;
 	Transform end = end_keyframe.transform_delta;
-	float index_delta = (float)playback_head / (float)end_keyframe.end_time;
+	uint64_t len = end_keyframe.end_time - start_keyframe.end_time;
+	uint64_t head = playback_head - start_keyframe.end_time;
+	float index_delta = (float)head / (float)len;
 
 	if (index_delta != 0.0)
 	{

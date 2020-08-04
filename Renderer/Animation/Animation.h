@@ -23,7 +23,8 @@ struct Animation
 	uint64_t duration = 0;
 	std::vector<Keyframe> keyframes;
 	Transform current_transform;
-	
+	bool ended = false;
+
 	public:
 	Animation();
 	void AddKeyframe(const Keyframe& keyframe);
