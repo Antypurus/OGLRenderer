@@ -3,6 +3,7 @@
 #include <cstdint>
 #include "../Transform.h"
 #include <vector>
+#include <functional>
 
 struct Keyframe
 {
@@ -25,6 +26,7 @@ struct Animation
 	Transform current_transform;
 	bool animating = false;
 	bool is_paused = false;
+	std::vector<std::function<void()>> animation_end_callbacks;
 
 private:
 	bool should_stop = false;
@@ -38,6 +40,10 @@ private:
 	void Stop();
 	void Pause();
 	void Resume();
+	void AddAnimationEndCallback(const std::function<void()>& callback);
 	
 	static Transform Interpolate(const Keyframe& start_keyframe, const Keyframe& end_keyframe, uint64_t playback_head);
+
+private:
+	void ExecuteCallbacks();
 };

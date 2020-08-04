@@ -95,6 +95,7 @@ void Animation::Play()
 			// checks if animation should end
 			if (this->playback_head >= this->duration)
 			{
+				this->ExecuteCallbacks();
 				this->animating = false;
 				return;
 			}
@@ -151,6 +152,11 @@ void Animation::Resume()
 	this->paused = false;
 }
 
+void Animation::AddAnimationEndCallback(const std::function<void()>& callback)
+{
+	this->animation_end_callbacks.push_back(callback);
+}
+
 Transform Animation::Interpolate(const Keyframe& start_keyframe, const Keyframe& end_keyframe, uint64_t playback_head)
 {
 	Transform start = start_keyframe.transform_delta;
@@ -184,5 +190,13 @@ Transform Animation::Interpolate(const Keyframe& start_keyframe, const Keyframe&
 	else
 	{
 		return {};
+	}
+}
+
+void Animation::ExecuteCallbacks()
+{
+	for(auto& callback:animation_end_callbacks)
+	{
+		callback();
 	}
 }

@@ -13,6 +13,7 @@
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
+#include <atomic>
 
 void InitImGui(const Window& window)
 {
@@ -47,32 +48,32 @@ void ImGuiRender()
 
 int main()
 {
-    Window window = {800,800,"Window"};
-	
+	Window window = { 800,800,"Window" };
+
 	glewInit(); // Use GLEW to load modern OpenGL functions from the GPU driver, this must be done after creating the window.
 	InitImGui(window);
-	
+
 	std::vector<Vertex> vertices = {
 		{glm::vec3{0.5f,  0.5f, 0.0f},  glm::vec2{1.0f, 1.0f}},  // top right
 		{glm::vec3{0.5f, -0.5f, 0.0f},  glm::vec2{1.0f, 0.0f}},  // bottom right
 		{glm::vec3{-0.5f, -0.5f, 0.0f}, glm::vec2{0.0f, 0.0f}},  // bottom left
 		{glm::vec3{-0.5f,  0.5f, 0.0f}, glm::vec2{0.0f, 1.0f}}   // top left 
 	};
-	
+
 	std::vector<uint32_t> indices = {
 		0, 1, 3,   // first triangle
 		1, 2, 3    // second triangle
 	};
-	
+
 	VertexBuffer<Vertex> vbo(vertices);
 	IndexBuffer ib(indices);
-	
-	Shader vs = {"./Resources/Shaders/base_vert.glsl", ShaderType::Vertex};
-	Shader fs = {"./Resources/Shaders/base_frag.glsl", ShaderType::Fragment};
-	GPUProgram shader = {vs, fs};
-	
-	Texture texture = {"./Resources/Textures/test.jpg"};
-	
+
+	Shader vs = { "./Resources/Shaders/base_vert.glsl", ShaderType::Vertex };
+	Shader fs = { "./Resources/Shaders/base_frag.glsl", ShaderType::Fragment };
+	GPUProgram shader = { vs, fs };
+
+	Texture texture = { "./Resources/Textures/test.jpg" };
+
 	Transform model_matrix = {
 		glm::vec3{0.0f,0.0f,0.0f},
 		glm::vec3{1.0f,1.0f,1.0f},
@@ -82,7 +83,7 @@ int main()
 	Animation animation;
 
 	animation.AddKeyframe(
-		{1000,
+		{ 1000,
 		{
 			glm::vec3{0.0f,0.0f,0.0f},
 			glm::vec3{0.0f,0.0f,0.0f},
@@ -91,7 +92,7 @@ int main()
 		});
 
 	animation.AddKeyframe(
-		{1000,
+		{ 1000,
 		{
 			glm::vec3{0.0f,0.0f,0.0f},
 			glm::vec3{0.0f,0.0f,0.0f},
@@ -100,7 +101,7 @@ int main()
 		});
 
 	animation.AddKeyframe(
-		{1000,
+		{ 1000,
 		{
 			glm::vec3{0.0f,0.0f,0.0f},
 			glm::vec3{0.0f,0.0f,0.0f},
@@ -109,7 +110,7 @@ int main()
 		});
 
 	animation.AddKeyframe(
-		{1000,
+		{ 1000,
 		{
 			glm::vec3{0.0f,0.0f,0.0f},
 			glm::vec3{0.0f,0.0f,0.0f},
@@ -119,29 +120,69 @@ int main()
 
 	bool show = true;
 
-	while(window.IsOpen())
-	{	
+	uint64_t credit_count = 0;
+	std::atomic_uint64_t play_count = 0;
+	uint64_t credits_extracted = 0;
+
+	animation.AddAnimationEndCallback([&play_count]()
+		{
+			play_count++;
+		});
+
+	while (window.IsOpen())
+	{
 		window.ClearViewport();
 		ImGuiStartFrame();
 		ImGui::BeginMainMenuBar();
-		bool selected = ImGui::Button("test");
-		if(selected)
+
+		bool start_pressed = ImGui::Button("Start");
+		if (start_pressed)
 		{
-			if(animation.animating)
+			if (credit_count > 0)
 			{
-				if(animation.is_paused)
+				credit_count--;
+				if (animation.animating)
 				{
-					animation.Resume();
-				}else
-				{
-					animation.Pause();
+					if (animation.is_paused)
+					{
+						animation.Resume();
+					}
+					else
+					{
+						animation.Pause();
+					}
 				}
-			}else
-			{
-				animation.Play();
+				else
+				{
+					animation.Play();
+				}
 			}
 		}
+
+		bool credit_in_pressed = ImGui::Button("Credits In");
+		if (credit_in_pressed)
+		{
+			credit_count++;
+		}
+
+		bool credits_out_pressed = ImGui::Button("Credits Out");
+		if (credits_out_pressed)
+		{
+			credits_extracted += credit_count;
+			credit_count = 0;
+		}
+
 		ImGui::EndMainMenuBar();
+
+		ImGui::Begin("Information Board");
+		std::string move_count_text = "Number Of Plays:" + std::to_string(play_count);
+		std::string curr_credits_text = "Current Credits:" + std::to_string(credit_count);
+		std::string extracted_credits_text = "Extracted Credits:" + std::to_string(credits_extracted);
+		ImGui::Text(move_count_text.c_str());
+		ImGui::Text(curr_credits_text.c_str());
+		ImGui::Text(extracted_credits_text.c_str());
+		ImGui::End();
+
 		ImGuiRender();
 
 		Transform final_model = model_matrix + animation.current_transform;
