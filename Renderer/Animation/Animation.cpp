@@ -74,10 +74,6 @@ void Animation::Play()
 			while (this->playback_head > this->keyframes[this->current_keyframe_index].end_time)
 			{
 				this->current_keyframe_index++;
-				if (this->current_keyframe_index = this->keyframes.size())
-				{
-					return;
-				}
 			}
 
 			//compute the current transform
