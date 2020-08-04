@@ -28,6 +28,11 @@ Animation::Animation()
 	};
 }
 
+Animation::~Animation()
+{
+	this->Stop();
+}
+
 void Animation::AddKeyframe(const Keyframe& keyframe)
 {
 	this->keyframes.push_back(keyframe);
@@ -57,6 +62,11 @@ void Animation::Play()
 		uint64_t prev_time = time_point_cast<std::chrono::milliseconds>(high_resolution_clock::now()).time_since_epoch().count();
 		while (this->playback_head <= this->duration)
 		{
+			if(this->should_stop)
+			{
+				return;
+			}
+
 			uint64_t current_time = time_point_cast<std::chrono::milliseconds>(high_resolution_clock::now()).time_since_epoch().count();
 
 			uint64_t delta = current_time - prev_time;
@@ -103,6 +113,11 @@ void Animation::Play()
 		}
 		});
 	play_thread.detach();
+}
+
+void Animation::Stop()
+{
+	this->should_stop = true;
 }
 
 Transform Animation::Interpolate(const Keyframe& start_keyframe, const Keyframe& end_keyframe, uint64_t playback_head)

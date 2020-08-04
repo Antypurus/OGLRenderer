@@ -25,10 +25,16 @@ struct Animation
 	Transform current_transform;
 	bool ended = false;
 
+private:
+	bool should_stop = false;
+	bool pause = false;
+
 	public:
 	Animation();
+	~Animation();
 	void AddKeyframe(const Keyframe& keyframe);
 	void Play();
+	void Stop();
 	
 	static Transform Interpolate(const Keyframe& start_keyframe, const Keyframe& end_keyframe, uint64_t playback_head);
 };

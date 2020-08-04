@@ -95,6 +95,6 @@ int main()
 		
 		window.Update();
 	}
-	
+
 	return 0;
 }
