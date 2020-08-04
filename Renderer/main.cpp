@@ -42,15 +42,15 @@ struct Game
 		Model model = {vbo, ib, texture};
 
 		Transform model_matrix = {
-			glm::vec3{0.0f,0.0f,0.0f},
-			glm::vec3{0.1f,0.1f,0.1f},
+			glm::vec3{-0.8f,-0.8f,0.0f},
+			glm::vec3{0.15f,0.15f,1.0f},
 			glm::vec3{0.0f,0.0f,0.0f}
 		};
 
-		constexpr uint64_t entity_count = 50;
+		constexpr uint64_t entity_count = 64;
 		for (uint64_t entity_index = 0; entity_index < entity_count; ++entity_index)
 		{
-			const uint64_t time_delta = entity_index*200;
+			const uint64_t time_delta = entity_index*20;
 			Animation animation;
 			animation.AddKeyframe({ 0 + time_delta,
 				{
@@ -92,8 +92,12 @@ struct Game
 				}
 				});
 
+			float separation_scalar = 1.5f;
+			float x = (((uint64_t)(entity_index / 8.0f) % 8) / 8.0f) * separation_scalar;
+			float y = ((entity_index % 8) / 8.0f) * separation_scalar;
+
 			Transform delta_transform = {
-				glm::vec3{ (entity_index % 7)  - 0.9f,(entity_index % 7)/7.0f,0},
+				glm::vec3{ x, y,0},
 				glm::vec3{0,0,0},
 				glm::vec3{0,0,0}
 			};
@@ -238,9 +242,9 @@ int main()
 		ImGui::Text(extracted_credits_text.c_str());
 		ImGui::End();
 
-		ImGuiRender();
 
 		game.Draw(shader,"model_matrix");
+		ImGuiRender();
 
 		window.Update();
 	}
