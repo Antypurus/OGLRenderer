@@ -66,7 +66,6 @@ void Animation::Play()
 	};
 	this->should_stop = false;
 	this->paused = false;
-	this->is_paused = false;
 	this->animating = true;
 
 	std::thread play_thread([this]() {
@@ -136,20 +135,30 @@ void Animation::Play()
 
 void Animation::Stop()
 {
+	this->paused = false;
 	this->should_stop = true;
 	this->animating = false;
 }
 
 void Animation::Pause()
 {
-	this->is_paused = true;
 	this->paused = true;
 }
 
 void Animation::Resume()
 {
-	this->is_paused = false;
 	this->paused = false;
+}
+
+void Animation::PauseResumeToggle()
+{
+	if(this->paused)
+	{
+		this->Resume();
+	}else
+	{
+		this->Pause();
+	}
 }
 
 void Animation::AddAnimationEndCallback(const std::function<void()>& callback)

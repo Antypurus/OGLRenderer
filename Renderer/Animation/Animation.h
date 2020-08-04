@@ -25,7 +25,6 @@ struct Animation
 	std::vector<Keyframe> keyframes;
 	Transform current_transform;
 	bool animating = false;
-	bool is_paused = false;
 	std::vector<std::function<void()>> animation_end_callbacks;
 
 private:
@@ -40,6 +39,7 @@ private:
 	void Stop();
 	void Pause();
 	void Resume();
+	void PauseResumeToggle();
 	void AddAnimationEndCallback(const std::function<void()>& callback);
 	
 	static Transform Interpolate(const Keyframe& start_keyframe, const Keyframe& end_keyframe, uint64_t playback_head);

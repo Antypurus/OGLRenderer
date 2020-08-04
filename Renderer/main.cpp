@@ -141,14 +141,7 @@ int main()
 
 			if (animation.animating)
 			{
-				if (animation.is_paused)
-				{
-					animation.Resume();
-				}
-				else
-				{
-					animation.Pause();
-				}
+				animation.PauseResumeToggle();
 			}
 			else
 			{
